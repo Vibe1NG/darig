@@ -6,7 +6,6 @@ YAQL dynamically loads YAML data into an in-memory SQLite database, allowing use
 YAQL generated database schemas are derived from YASL schema definitions, ensuring data integrity and consistency.
 """
 
-from darig.query.cli import main
 from darig.query.engine import (
     YaqlEngine,
     export_data,
@@ -16,7 +15,6 @@ from darig.query.engine import (
 )
 
 __all__ = [
-    "main",
     "get_session",
     "load_schema",
     "load_data",
