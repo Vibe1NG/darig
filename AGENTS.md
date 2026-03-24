@@ -19,9 +19,9 @@ The project uses **uv** for dependency management and task execution. All comman
 | **All CI** | `./ci.sh all` | Run full CI pipeline (test, format, lint, type, bdd, build) |
 
 ### Running Specific Tests
-*   **Single Test File:** `uv run pytest tests/yasl/test_yasl.py`
-*   **Single Test Function:** `uv run pytest tests/yasl/test_yasl.py::test_load_schema`
-*   **Specific BDD Feature:** `uv run behave features/yasl/yasl_basic.feature`
+*   **Single Test File:** `uv run pytest tests/darig/schema/test_schema.py`
+*   **Single Test Function:** `uv run pytest tests/darig/schema/test_schema.py::test_load_schema`
+*   **Specific BDD Feature:** `uv run behave features/darig/schema/schema_basic.feature`
 
 ## 2. Code Style & Conventions
 
@@ -53,8 +53,8 @@ The project uses **uv** for dependency management and task execution. All comman
 ## 3. Project Structure
 
 The project is modularized by functionality:
-*   `src/darig/schema/`: **YASL** (YAML Advanced Scripting Language) - Schema definition & verification.
-*   `src/darig/query/`: **YAQL** (YAML Advanced Query Language) - Querying capabilities.
+*   `src/darig/schema/`: **Darig Schema** - Schema definition & verification.
+*   `src/darig/query/`: **Darig Query** - Querying capabilities.
 *   `tests/`: Unit tests mirroring the `src` structure.
 *   `features/`: Gherkin feature files for BDD.
 

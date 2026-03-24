@@ -1,15 +1,15 @@
 import pytest
 
-from darig.schema.cache import YaslRegistry
+from darig.schema.cache import DarigSchemaRegistry
 from darig.schema.core import load_schema
 
 
 def setup_function():
-    YaslRegistry().clear_caches()
+    DarigSchemaRegistry().clear_caches()
 
 
 def teardown_function():
-    YaslRegistry().clear_caches()
+    DarigSchemaRegistry().clear_caches()
 
 
 def test_circular_dependency_error():
@@ -58,7 +58,7 @@ def test_deep_chain_dependency():
     # Should not raise
     _ = load_schema(schema_data)
 
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
     assert registry.get_type("TypeA", "chain_ns") is not None
     assert registry.get_type("TypeB", "chain_ns") is not None
     assert registry.get_type("TypeC", "chain_ns") is not None

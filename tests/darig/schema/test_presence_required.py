@@ -1,6 +1,6 @@
 from io import StringIO
 
-from darig.schema import yasl_eval
+from darig.schema import darig_eval
 
 
 def test_presence_required_valid():
@@ -8,7 +8,7 @@ def test_presence_required_valid():
     data_path = "tests/darig/schema/data/presence_required_valid.yaml"
 
     # Should pass
-    result = yasl_eval(schema_path, data_path, "person", quiet_log=True)
+    result = darig_eval(schema_path, data_path, "person", quiet_log=True)
     assert result is not None
 
 
@@ -18,7 +18,7 @@ def test_presence_required_warn():
 
     stream = StringIO()
     # Should pass but warn
-    result = yasl_eval(schema_path, data_path, "person", log_stream=stream)
+    result = darig_eval(schema_path, data_path, "person", log_stream=stream)
 
     assert result is not None
     log_output = stream.getvalue()
@@ -30,5 +30,5 @@ def test_presence_required_invalid():
     data_path = "tests/darig/schema/data/presence_required_invalid.yaml"
 
     # Should fail
-    result = yasl_eval(schema_path, data_path, "person", quiet_log=True)
+    result = darig_eval(schema_path, data_path, "person", quiet_log=True)
     assert result is None

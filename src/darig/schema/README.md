@@ -1,7 +1,9 @@
-# YASL - YAML Advanced Schema Language
+# Darig Schema
 
-YASL is an advanced schema language & validation tools for YAML. 
+Darig Schema is an advanced schema language & validation tools for YAML. 
 It supports definition and validation of data structures with primitives, enumerations, and composition of defined types.
+
+Darig Schema is the core validation engine of the Darig suite, formerly known as YASL.
 
 ## Motivation
 

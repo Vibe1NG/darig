@@ -1,6 +1,6 @@
 from io import StringIO
 
-from darig.schema import yasl_eval
+from darig.schema import darig_eval
 
 
 def test_presence_optional_missing():
@@ -9,7 +9,7 @@ def test_presence_optional_missing():
 
     stream = StringIO()
     # Should pass without warnings
-    result = yasl_eval(schema_path, data_path, "person_optional", log_stream=stream)
+    result = darig_eval(schema_path, data_path, "person_optional", log_stream=stream)
 
     assert result is not None
     log_output = stream.getvalue()
@@ -29,7 +29,7 @@ def test_presence_default_is_optional():
     data_path = "tests/darig/schema/data/presence_optional_missing.yaml"
 
     stream = StringIO()
-    result = yasl_eval(schema_path, data_path, "person_optional", log_stream=stream)
+    result = darig_eval(schema_path, data_path, "person_optional", log_stream=stream)
 
     assert result is not None
     # If bio was required, validation would fail.

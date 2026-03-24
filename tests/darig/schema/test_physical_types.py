@@ -4,7 +4,7 @@ from io import StringIO
 
 import pytest
 
-from darig.schema import yasl_eval
+from darig.schema import darig_eval
 from darig.schema.primitives import PRIMITIVE_TYPE_MAP
 
 
@@ -18,7 +18,7 @@ def run_eval_command(yaml_data, yasl_schema, model_name, expect_valid):
             f.write(yasl_schema)
 
         test_log = StringIO()
-        yasl_model = yasl_eval(
+        yasl_model = darig_eval(
             yasl_path,
             yaml_path,
             model_name,

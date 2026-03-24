@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from darig.cli import YaqlShell
+from darig.cli import DarigQueryShell
 
 
 @pytest.fixture
@@ -13,7 +13,7 @@ def mock_engine():
 
 @pytest.fixture
 def shell(mock_engine):
-    return YaqlShell(mock_engine)
+    return DarigQueryShell(mock_engine)
 
 
 def test_load_schema_success(shell, mock_engine, caplog):
@@ -169,8 +169,8 @@ def test_cli_launch_and_quit_simulated(capsys, caplog):
         mock_basic_config.assert_called_with(level=logging.INFO, format="%(message)s")
 
     captured = capsys.readouterr()
-    # "Welcome to the YAQL shell" is printed to stdout by cmd.Cmd
-    assert "Welcome to the YAQL shell." in captured.out
+    # "Welcome to the Darig Query shell. is printed to stdout by cmd.Cmd
+    assert "Welcome to the Darig Query shell." in captured.out
 
     # "Goodbye!" is logged via info.
     assert "Goodbye!" in caplog.text
@@ -205,7 +205,7 @@ def test_cli_arguments_quiet_simulated(capsys, caplog):
         mock_basic_config.assert_called_with(level=logging.ERROR, format="%(message)s")
 
     captured = capsys.readouterr()
-    assert "Welcome to the YAQL shell." in captured.out
+    assert "Welcome to the Darig Query shell." in captured.out
 
     # "Goodbye!" (INFO) should NOT be in caplog text if we are at ERROR level
     assert "Goodbye!" not in caplog.text
@@ -251,7 +251,7 @@ def test_cli_load_schema_on_startup(capsys, caplog):
         patch("sys.argv", ["darig", "query", "--schema", "path/to/schema"]),
         patch("logging.basicConfig"),
         patch(
-            "darig.query.engine.YaqlEngine.load_schema", return_value=True
+            "darig.query.engine.DarigQueryEngine.load_schema", return_value=True
         ) as mock_load,
     ):
         main()
@@ -274,10 +274,10 @@ def test_cli_load_data_on_startup_success(capsys, caplog):
         ),
         patch("logging.basicConfig"),
         patch(
-            "darig.query.engine.YaqlEngine.load_schema", return_value=True
+            "darig.query.engine.DarigQueryEngine.load_schema", return_value=True
         ) as mock_load_schema,
         patch(
-            "darig.query.engine.YaqlEngine.load_data", return_value=10
+            "darig.query.engine.DarigQueryEngine.load_data", return_value=10
         ) as mock_load_data,
     ):
         main()

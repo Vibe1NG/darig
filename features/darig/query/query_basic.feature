@@ -1,4 +1,4 @@
-Feature: Basic Darig Query (YAQL)
+Feature: Basic Darig Query
   As a developer
   I want to query YAML data using SQL
   So that I can perform complex data analysis
@@ -12,4 +12,4 @@ Feature: Basic Darig Query (YAQL)
 
   Scenario: Running the Darig query CLI in interactive mode
     When I run the Darig query CLI with "--interactive"
-    Then the CLI should show the welcome message "Welcome to the YAQL shell."
+    Then the CLI should show the welcome message "Welcome to the Darig Query shell."

@@ -88,9 +88,9 @@ def test_yaml_data_validation_errors():
     """Test that YAML data validation correctly identifies errors against the schema."""
 
     # Setup: Load a valid schema. We need to clear registry first because previous tests might have registered it.
-    from darig.schema.cache import YaslRegistry
+    from darig.schema.cache import DarigSchemaRegistry
 
-    YaslRegistry().clear_caches()
+    DarigSchemaRegistry().clear_caches()
 
     yasl_data = yaml.safe_load(TODO_YASL)
     load_schema(yasl_data)

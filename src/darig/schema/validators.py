@@ -12,7 +12,7 @@ import numpy as np
 import requests
 from pydantic import field_validator, model_validator
 
-from darig.schema.cache import YaslRegistry
+from darig.schema.cache import DarigSchemaRegistry
 from darig.schema.pydantic_types import IfThen, Property, TypeDef
 from darig.schema.validator_helpers import _ensure_comparable
 
@@ -24,7 +24,7 @@ def unique_value_validator(
     property_name: str,
     type_namespace: str | None = None,
 ):
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
     registry.register_unique_value(type_name, property_name, value, type_namespace)
     return value
 
@@ -255,7 +255,7 @@ def ref_exists_validator(cls, value: Any, target: str):
     if type_name and "." in type_name:
         type_namespace, type_name = type_name.rsplit(".", 1)
 
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
 
     def check_value(v):
         if not registry.unique_value_exists(
@@ -276,7 +276,7 @@ def ref_exists_validator(cls, value: Any, target: str):
 
 # any validator
 def any_of_validator(cls, value: Any, any_of: list[str], namespace: str | None = None):
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
     for t in any_of:
         if t.endswith("[]"):
             elem_type_name = t[:-2]
@@ -399,7 +399,7 @@ def map_validator(
     any_of: list[str] | None = None,
 ):
     # validate key type is str, int, or an enumation
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
     enum_namespace = None
     enum_name = key_type
     if "." in key_type:
@@ -418,7 +418,7 @@ def map_validator(
 
 # type validator
 def type_validator(cls, value: str, namespace: str | None = None):
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
     from darig.schema.primitives import PRIMITIVE_TYPE_MAP
 
     # 1. Check if it's a primitive type
@@ -451,9 +451,9 @@ def type_validator(cls, value: str, namespace: str | None = None):
         # First check if it is a valid type in general
         type_validator(cls, key_type, namespace)
 
-        # Then check specific map key constraints if we want to be strict strictly about valid YASL maps
+        # Then check specific map key constraints if we want to be strict strictly about valid Darig Schema maps
         # map_validator enforces: str, int, or enum.
-        registry = YaslRegistry()
+        registry = DarigSchemaRegistry()
         is_enum = False
         enum_ns = namespace
         enum_name = key_type
@@ -626,7 +626,7 @@ def property_validator_factory(
         validators.append(partial(ref_exists_validator, target=ref_target))
 
     # enum validators
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
     enum_names: list[tuple[str, str | None]] = registry.get_enums()
 
     if property.type in dict(enum_names).keys():
@@ -708,7 +708,7 @@ def if_then_validator(cls, values: dict[str, Any], if_then: IfThen):
 
 
 def preferred_presence_validator(cls, values: Any, properties: dict[str, Property]):
-    log = logging.getLogger("yasl")
+    log = logging.getLogger("darig")
     values_dict = values.model_dump()
 
     # Access the hidden yaml_line field if it exists

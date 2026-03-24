@@ -4,7 +4,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 
-class YASLBaseModel(BaseModel):
+class DarigBaseModel(BaseModel):
     yaml_line: int | None = Field(default=None, exclude=True)
     yaml_file: str | None = Field(default=None, exclude=True)
 
@@ -13,8 +13,8 @@ class YASLBaseModel(BaseModel):
         return f"{self.__class__.__name__}({fields})"
 
 
-# --- YASL Pydantic Models ---
-class Enumeration(YASLBaseModel):
+# --- Darig Schema Pydantic Models ---
+class Enumeration(DarigBaseModel):
     # name: str
     description: str | None = None
     values: list[str]
@@ -22,7 +22,7 @@ class Enumeration(YASLBaseModel):
     model_config = {"extra": "forbid"}
 
 
-class Property(YASLBaseModel):
+class Property(DarigBaseModel):
     # name: str
     type: str
     description: str | None = None
@@ -72,7 +72,7 @@ class Property(YASLBaseModel):
     model_config = {"extra": "forbid"}
 
 
-class IfThen(YASLBaseModel):
+class IfThen(DarigBaseModel):
     eval: str
     value: list[str]
     present: list[str]
@@ -81,7 +81,7 @@ class IfThen(YASLBaseModel):
     model_config = {"extra": "forbid"}
 
 
-class Validator(YASLBaseModel):
+class Validator(DarigBaseModel):
     only_one: list[str] | None = None
     at_least_one: list[str] | None = None
     if_then: list[IfThen] | None = None
@@ -89,7 +89,7 @@ class Validator(YASLBaseModel):
     model_config = {"extra": "forbid"}
 
 
-class TypeDef(YASLBaseModel):
+class TypeDef(DarigBaseModel):
     # name: str
     namespace: str | None = None
     description: str | None = None
@@ -99,15 +99,15 @@ class TypeDef(YASLBaseModel):
     model_config = {"extra": "forbid"}
 
 
-class YaslItem(YASLBaseModel):
+class DarigSchemaItem(DarigBaseModel):
     description: str | None = None
     enums: dict[str, Enumeration] | None = None
     types: dict[str, TypeDef] | None = None
     model_config = {"extra": "forbid"}
 
 
-class YaslRoot(YASLBaseModel):
+class DarigSchemaRoot(DarigBaseModel):
     imports: list[str] | None = None
     metadata: dict[str, Any] | None = None
-    definitions: dict[str, YaslItem] | None = None
+    definitions: dict[str, DarigSchemaItem] | None = None
     model_config = {"extra": "forbid"}

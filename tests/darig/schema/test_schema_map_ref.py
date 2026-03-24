@@ -2,7 +2,7 @@ import os
 import tempfile
 from io import StringIO
 
-from darig.schema import yasl_eval
+from darig.schema import darig_eval
 
 
 def run_eval_command(yaml_data, yasl_schema, model_name, expect_valid):
@@ -15,7 +15,7 @@ def run_eval_command(yaml_data, yasl_schema, model_name, expect_valid):
             f.write(yasl_schema)
 
         test_log = StringIO()
-        yasl_model = yasl_eval(
+        yasl_model = darig_eval(
             yasl_path,
             yaml_path,
             model_name,

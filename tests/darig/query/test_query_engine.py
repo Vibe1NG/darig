@@ -3,30 +3,30 @@ from pathlib import Path
 import pytest
 from sqlmodel import SQLModel
 
-from darig.query.engine import YaqlEngine
-from darig.schema.cache import YaslRegistry
+from darig.query.engine import DarigQueryEngine
+from darig.schema.cache import DarigSchemaRegistry
 
 YASL_DIR = Path("tests/darig/query/data")
 
 
 @pytest.fixture(autouse=True)
 def clear_registry():
-    YaslRegistry().clear_caches()
+    DarigSchemaRegistry().clear_caches()
     SQLModel.metadata.clear()
     yield
-    YaslRegistry().clear_caches()
+    DarigSchemaRegistry().clear_caches()
     SQLModel.metadata.clear()
 
 
 def test_engine_init():
-    engine = YaqlEngine()
+    engine = DarigQueryEngine()
     assert (
         engine.engine is not None
     )  # conn is no longer a public attribute in sqlmodel engine
 
 
 def test_load_schema():
-    engine = YaqlEngine()
+    engine = DarigQueryEngine()
     # Using a known existing schema file from the repo
     schema_path = YASL_DIR / "person.yasl"
 
@@ -48,7 +48,7 @@ def test_load_schema():
 
 
 def test_load_schema_dir():
-    engine = YaqlEngine()
+    engine = DarigQueryEngine()
     # Using a known existing schema file from the repo
     schema_path = YASL_DIR
 
@@ -66,7 +66,7 @@ def test_load_schema_dir():
 
 
 def test_load_data():
-    engine = YaqlEngine()
+    engine = DarigQueryEngine()
     schema_path = YASL_DIR / "person.yasl"
     data_path = YASL_DIR / "person.yaml"
 
@@ -80,7 +80,7 @@ def test_load_data():
 
 
 def test_load_data_dir():
-    engine = YaqlEngine()
+    engine = DarigQueryEngine()
     schema_path = YASL_DIR / "person.yasl"
     data_path = YASL_DIR
 
@@ -94,7 +94,7 @@ def test_load_data_dir():
 
 
 def test_sql_execution():
-    engine = YaqlEngine()
+    engine = DarigQueryEngine()
     engine.execute_sql("CREATE TABLE test (id INTEGER, name TEXT)")
     engine.execute_sql("INSERT INTO test VALUES (1, 'Alice')")
 
@@ -117,7 +117,7 @@ def test_store_data_not_implemented(tmp_path):
 
 
 def test_relationships_and_fks():
-    engine = YaqlEngine()
+    engine = DarigQueryEngine()
     schema_path = YASL_DIR / "relationship.yasl"
     data_path = YASL_DIR / "relationship.yaml"
 

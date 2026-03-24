@@ -3,8 +3,8 @@
 Darig is a suite of tools that streamline data management of structured data in YAML.
 
 These tools include:
- - YASL - YAML Advanced Schema Language
- - YAQL - YAML Advanced Query Language
+ - Darig Schema - Data validation and schema enforcement
+ - Darig Query - Query your YAML using standard SQL queries
 
 ## Vision & Inspiration
 
@@ -25,8 +25,8 @@ This would allow teams to leverage robust version control systems to rigorously 
 Teams can create automations to ensure data validity and integrity.
 And this could be done without compromising the common user experiences teams are accustomed to when working with their data.
 
-darig attempts to enable this by providing robust solutions for defining and validating data structure and integrity through schemas in the `yasl` tool.
-The `yaql` tool builds upon this by providing a query language and database facade for your data.
+darig attempts to enable this by providing robust solutions for defining and validating data structure and integrity through schemas.
+It builds upon this by providing a query language and database facade for your data.
 Over time additional tools will be added to support other use cases and streamline development of products that utilize this 'semi-static' data management concept.
 
 

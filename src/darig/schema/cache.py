@@ -6,15 +6,16 @@ from typing import Any, Optional
 from pydantic import BaseModel
 
 
-class YaslRegistry:
+class DarigSchemaRegistry:
     """
-    Singleton registry for YASL type definitions and enumerations.
+    Singleton registry for Darig type definitions and enumerations.
+    Formerly known as DarigSchemaRegistry.
     Supports registration and lookup by name and optional namespace.
     """
 
-    _instance: Optional["YaslRegistry"] = None
+    _instance: Optional["DarigSchemaRegistry"] = None
 
-    def __new__(cls) -> "YaslRegistry":
+    def __new__(cls) -> "DarigSchemaRegistry":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._init_registry()
@@ -29,7 +30,7 @@ class YaslRegistry:
         self, name: str, type_def: type[BaseModel], namespace: str
     ) -> None:
         key = (name, namespace)
-        log = logging.getLogger("yasl")
+        log = logging.getLogger("darig")
         if key in self.yasl_type_defs:
             raise ValueError(f"Type '{name}' already exists in namespace '{namespace}'")
         self.yasl_type_defs[key] = type_def
@@ -45,7 +46,7 @@ class YaslRegistry:
         namespace: str | None = None,
         default_namespace: str | None = None,
     ) -> type[BaseModel] | None:
-        log = logging.getLogger("yasl")
+        log = logging.getLogger("darig")
         log.debug(
             f"Looking up type '{name}' in namespace '{namespace}' with default namespace '{default_namespace}'"
         )
@@ -71,7 +72,7 @@ class YaslRegistry:
         )
 
     def register_enum(self, name: str, enum_def: Enum, namespace: str) -> None:
-        log = logging.getLogger("yasl")
+        log = logging.getLogger("darig")
         key = (name, namespace)
         if key in self.yasl_enumerations:
             raise ValueError(f"Enum '{name}' already exists in namespace '{namespace}'")
@@ -87,7 +88,7 @@ class YaslRegistry:
         namespace: str | None = None,
         default_namespace: str | None = None,
     ) -> Enum | None:
-        log = logging.getLogger("yasl")
+        log = logging.getLogger("darig")
         log.debug(
             f"Looking up enum '{name}' in namespace '{namespace}' with default namespace '{default_namespace}'"
         )
@@ -164,7 +165,7 @@ class YaslRegistry:
 
     def export_schema(self) -> str:
         """
-        Export all registered types and enums as a YASL schema string in YAML format.
+        Export all registered types and enums as a Darig schema string in YAML format.
         Groups definitions by namespace.
         """
         from io import StringIO
@@ -336,9 +337,9 @@ class YaslRegistry:
 
 
 # Singleton instance
-yasl_registry = YaslRegistry()
+darig_schema_registry = DarigSchemaRegistry()
 
 
-def get_yasl_registry() -> YaslRegistry:
-    """Get the singleton YaslRegistry instance."""
-    return yasl_registry
+def get_darig_schema_registry() -> DarigSchemaRegistry:
+    """Get the singleton DarigSchemaRegistry instance."""
+    return darig_schema_registry

@@ -9,23 +9,23 @@ import sys
 from typing import Any
 
 from darig.common.utils import darig_version
-from darig.query.engine import YaqlEngine
+from darig.query.engine import DarigQueryEngine
 from darig.schema import check_paths, check_schema
 
 
-class YaqlShell(cmd.Cmd):
-    intro = "Welcome to the YAQL shell.   Type help or ? to list commands.\n"
-    prompt = "(yaql) "
+class DarigQueryShell(cmd.Cmd):
+    intro = "Welcome to the Darig Query shell.   Type help or ? to list commands.\n"
+    prompt = "(darig_query) "
 
-    def __init__(self, engine: YaqlEngine):
+    def __init__(self, engine: DarigQueryEngine):
         super().__init__()
         self.engine = engine
         self.log = logging.getLogger(__name__)
 
     def do_load_schema(self, arg):
         """
-        Load a YASL schema definition.
-        Usage: load_schema <path_to_yasl_file_or_dir>
+        Load a Darig schema definition.
+        Usage: load_schema <path_to_darig_file_or_dir>
         """
         if not arg:
             self.log.error("❌ Please provide a file path or directory.")
@@ -103,12 +103,12 @@ class YaqlShell(cmd.Cmd):
                 print(" | ".join(str(v) for v in row.values()))
 
     def do_exit(self, arg):
-        """Exit the YAQL shell."""
+        """Exit the Darig Query shell."""
         self.log.info("Goodbye!")
         return True
 
     def do_quit(self, arg):
-        """Exit the YAQL shell."""
+        """Exit the Darig Query shell."""
         return self.do_exit(arg)
 
 
@@ -138,7 +138,7 @@ def get_parser():
 
     # Command: check
     check_parser = subparsers.add_parser(
-        "check", help="Check mixed YASL schemas and YAML data"
+        "check", help="Check mixed Darig schemas and YAML data"
     )
     check_parser.add_argument(
         "paths",
@@ -148,21 +148,21 @@ def get_parser():
     check_parser.add_argument(
         "--model",
         dest="model_name",
-        help="Specific YASL schema type name to validate data against (optional)",
+        help="Specific Darig schema type name to validate data against (optional)",
     )
 
     # Command: schema
     schema_parser = subparsers.add_parser(
-        "schema", help="Check the validity of a YASL schema file"
+        "schema", help="Check the validity of a Darig schema file"
     )
     schema_parser.add_argument(
         "schema",
-        help="YASL schema file or directory",
+        help="Darig schema file or directory",
     )
 
     # Command: query
     query_parser = subparsers.add_parser(
-        "query", help="Query YAML data using SQL (YAQL)"
+        "query", help="Query YAML data using SQL (Darig Query)"
     )
     query_parser.add_argument(
         "--sql",
@@ -171,11 +171,11 @@ def get_parser():
     query_parser.add_argument(
         "--interactive",
         action="store_true",
-        help="Start interactive YAQL shell (default if no --sql provided)",
+        help="Start interactive Darig Query shell (default if no --sql provided)",
     )
     query_parser.add_argument(
         "--schema",
-        help="Path to a YASL schema file or directory to load on startup",
+        help="Path to a Darig schema file or directory to load on startup",
     )
     query_parser.add_argument(
         "--data",
@@ -233,7 +233,7 @@ def main():
             print("❌ Cannot load data without a schema. Please provide --schema.")
             sys.exit(1)
 
-        engine = YaqlEngine()
+        engine = DarigQueryEngine()
 
         # Load initial schema if provided
         if args.schema:
@@ -258,7 +258,7 @@ def main():
         if args.sql:
             try:
                 results = engine.execute_sql(args.sql)
-                shell = YaqlShell(engine)
+                shell = DarigQueryShell(engine)
                 shell._print_results(results)
                 sys.exit(0)
             except Exception:
@@ -266,7 +266,7 @@ def main():
                 sys.exit(1)
         else:
             # Interactive mode
-            shell = YaqlShell(engine)
+            shell = DarigQueryShell(engine)
             try:
                 shell.cmdloop()
             except KeyboardInterrupt:

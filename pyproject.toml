@@ -1,7 +1,7 @@
 [project]
 name = "darig"
 version = "0.5.0"
-description = "Darig: A suite of tools to advance your usage of YAML. YASL provides schema definition and verification, while YAQL lets you query your YAML as if it were a database."
+description = "Darig: A unified suite of tools for schema validation and querying of YAML."
 readme = "pypi_readme.md"
 requires-python = ">=3.12"
 dependencies = [

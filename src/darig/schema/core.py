@@ -18,9 +18,14 @@ from pydantic import (
 from ruamel.yaml import YAML, YAMLError
 
 from darig.common.utils import darig_version
-from darig.schema.cache import YaslRegistry
+from darig.schema.cache import DarigSchemaRegistry
 from darig.schema.primitives import PRIMITIVE_TYPE_MAP, ReferenceMarker
-from darig.schema.pydantic_types import Enumeration, TypeDef, YASLBaseModel, YaslRoot
+from darig.schema.pydantic_types import (
+    DarigBaseModel,
+    DarigSchemaRoot,
+    Enumeration,
+    TypeDef,
+)
 from darig.schema.validators import property_validator_factory, type_validator_factory
 
 
@@ -81,10 +86,10 @@ def _setup_logging(
     logger.addHandler(handler)
 
 
-# --- YASL Models and Validation Logic ---
+# --- Darig Schema Models and Validation Logic ---
 
 
-def yasl_version() -> str:
+def darig_schema_version() -> str:
     """
     Get the version of the darig package.
 
@@ -94,8 +99,8 @@ def yasl_version() -> str:
     return darig_version()
 
 
-def yasl_eval(
-    yasl_schema: str,
+def darig_eval(
+    schema_path: str,
     yaml_data: str,
     model_name: str | None = None,
     disable_log: bool = False,
@@ -105,10 +110,10 @@ def yasl_eval(
     log_stream: StringIO | TextIO = sys.stdout,
 ) -> list[BaseModel] | None:
     """
-    Evaluate YAML data against a YASL schema.
+    Evaluate YAML data against a Darig schema.
 
     Args:
-        yasl_schema (str): Path to the YASL schema file or directory.
+        schema_path (str): Path to the Darig schema file or directory.
         yaml_data (str): Path to the YAML data file or directory.
         model_name (str, optional): Specific model name to use for validation. If not provided, the model will be auto-detected.
         disable_log (bool): If True, disables all logging output.
@@ -128,28 +133,33 @@ def yasl_eval(
         output=output,
         stream=log_stream,
     )
-    log = logging.getLogger("yasl")
-    log.debug(f"YASL Version - {yasl_version()}")
-    log.debug(f"YASL Schema - {yasl_schema}")
+    log = logging.getLogger("darig")
+    log.debug(f"Darig Schema Version - {darig_schema_version()}")
+    log.debug(f"Darig Schema - {schema_path}")
     log.debug(f"YAML Data - {yaml_data}")
 
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
 
-    yasl_files = []
-    if Path(yasl_schema).is_dir():
-        for p in Path(yasl_schema).rglob("*.yasl"):
-            yasl_files.append(p)
-        if not yasl_files:
-            log.error(f"❌ No .yasl files found in directory '{yasl_schema}'")
+    schema_files = []
+    if Path(schema_path).is_dir():
+        for p in Path(schema_path).rglob("*.darig"):
+            schema_files.append(p)
+        for p in Path(schema_path).rglob("*.yasl"):
+            schema_files.append(p)
+
+        if not schema_files:
+            log.error(f"❌ No schema files found in directory '{schema_path}'")
             registry.clear_caches()
             return None
-        log.debug(f"Found {len(yasl_files)} .yasl files in directory '{yasl_schema}'")
+        log.debug(
+            f"Found {len(schema_files)} schema files in directory '{schema_path}'"
+        )
     else:
-        if not Path(yasl_schema).exists():
-            log.error(f"❌ YASL schema file '{yasl_schema}' not found")
+        if not Path(schema_path).exists():
+            log.error(f"❌ Darig schema file '{schema_path}' not found")
             registry.clear_caches()
             return None
-        yasl_files.append(Path(yasl_schema))
+        schema_files.append(Path(schema_path))
 
     yaml_files = []
     if Path(yaml_data).is_dir():
@@ -167,14 +177,14 @@ def yasl_eval(
             return None
         yaml_files.append(Path(yaml_data))
 
-    yasl_results = []
-    for yasl_file in yasl_files:
-        yasl = load_schema_files(str(yasl_file))
-        if yasl is None:
-            log.error("❌ YASL schema validation failed. Exiting.")
+    validation_results = []
+    for schema_file in schema_files:
+        schema_obj = load_schema_files(str(schema_file))
+        if schema_obj is None:
+            log.error("❌ Darig schema validation failed. Exiting.")
             registry.clear_caches()
             return None
-        yasl_results.extend(yasl)
+        validation_results.extend(schema_obj)
 
     results = []
 
@@ -191,6 +201,9 @@ def yasl_eval(
     registry.clear_caches()
     return results
 
+    registry.clear_caches()
+    return results
+
 
 def check_paths(
     paths: list[str],
@@ -202,18 +215,18 @@ def check_paths(
     log_stream: StringIO | TextIO = sys.stdout,
 ) -> bool:
     """
-    Check mixed YASL schemas and YAML data from a list of paths.
+    Check mixed Darig Schema schemas and YAML data from a list of paths.
 
-    This function recursively scans the provided paths for YASL schema files (.yasl)
+    This function recursively scans the provided paths for Darig Schema schema files (.darig_schema)
     and YAML data files (.yaml, .yml). It employs a heuristic to distinguish between
     schema and data files regardless of extension: if a file parses strictly as a
-    valid YASL schema (YaslRoot), it is treated as such; otherwise, it is treated
+    valid Darig Schema schema (DarigSchemaRoot), it is treated as such; otherwise, it is treated
     as data to be validated.
 
     Process:
     1.  Scan paths for all candidate files.
     2.  Classify each file as Schema or Data.
-    3.  Compile all identified Schemas into the YaslRegistry.
+    3.  Compile all identified Schemas into the DarigSchemaRegistry.
     4.  Validate all identified Data files against the registered schemas.
         - If `model_name` is provided, validate against that specific model.
         - Otherwise, auto-detect the schema based on root keys.
@@ -238,10 +251,10 @@ def check_paths(
         output=output,
         stream=log_stream,
     )
-    log = logging.getLogger("yasl")
-    log.debug(f"YASL Version - {yasl_version()}")
+    log = logging.getLogger("darig_schema")
+    log.debug(f"Darig Schema Version - {darig_schema_version()}")
 
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
     registry.clear_caches()
 
     # 1. Collect all files
@@ -249,7 +262,7 @@ def check_paths(
     for p_str in paths:
         p = Path(p_str)
         if p.is_dir():
-            # Recursively find .yaml, .yml, .yasl
+            # Recursively find .yaml, .yml, .darig_schema
             files_to_process.update(p.rglob("*.yaml"))
             files_to_process.update(p.rglob("*.yml"))
             files_to_process.update(p.rglob("*.yasl"))
@@ -266,7 +279,7 @@ def check_paths(
         log.error("❌ No files found to process.")
         return False
 
-    schemas: list[YaslRoot] = []
+    schemas: list[DarigSchemaRoot] = []
     # Store data as (dict_data, file_path_str)
     data_items: list[tuple[Any, str]] = []
 
@@ -303,18 +316,18 @@ def check_paths(
             if doc is None:
                 continue
 
-            # Heuristic: Try to parse as YaslRoot (Schema)
+            # Heuristic: Try to parse as DarigSchemaRoot (Schema)
             try:
-                # YaslRoot structure is strict.
+                # DarigSchemaRoot structure is strict.
                 # However, an empty dict or minimal dict might pass if optional fields are None.
-                # But YaslRoot requires at least one of imports, metadata, or definitions to be useful.
+                # But DarigSchemaRoot requires at least one of imports, metadata, or definitions to be useful.
                 # Let's trust Pydantic validation.
 
-                # Check 1: If it's a list, it's definitely not a YaslRoot (which is a dict)
+                # Check 1: If it's a list, it's definitely not a DarigSchemaRoot (which is a dict)
                 if not isinstance(doc, dict):
                     raise ValidationError.from_exception_data("Not a dict", [])
 
-                schema_candidate = YaslRoot(**doc)
+                schema_candidate = DarigSchemaRoot(**doc)
 
                 # Check 2: If it's effectively empty, treat as data.
                 if not any(
@@ -348,7 +361,7 @@ def check_paths(
 
     # 3. Compile Schemas
     log.debug(f"Compiling {len(schemas)} schemas...")
-    if not compile_yasl_roots(schemas):
+    if not compile_darig_schema_roots(schemas):
         log.error("❌ Schema compilation failed.")
         return False
 
@@ -365,9 +378,9 @@ def check_paths(
 
         if model_name is None:
             root_keys = list(data.keys())
-            # registry is singleton, populated by compile_yasl_roots
-            yasl_types = registry.get_types()
-            for type_id, type_def in yasl_types.items() or []:
+            # registry is singleton, populated by compile_darig_schema_roots
+            darig_schema_types = registry.get_types()
+            for type_id, type_def in darig_schema_types.items() or []:
                 t_name, t_ns = type_id
                 t_def_keys = list(type_def.model_fields.keys())
                 # subset check: all keys in data must be in type definition?
@@ -450,7 +463,7 @@ def check_paths(
 
 
 def check_schema(
-    yasl_schema: str,
+    darig_schema_schema: str,
     disable_log: bool = False,
     quiet_log: bool = False,
     verbose_log: bool = False,
@@ -458,10 +471,10 @@ def check_schema(
     log_stream: StringIO | TextIO = sys.stdout,
 ) -> bool:
     """
-    Check the validity of a YASL schema file or directory.
+    Check the validity of a Darig Schema schema file or directory.
 
     Args:
-        yasl_schema (str): Path to the YASL schema file or directory.
+        darig_schema_schema (str): Path to the Darig Schema schema file or directory.
         disable_log (bool): If True, disables all logging output.
         quiet_log (bool): If True, suppresses all output except for errors.
         verbose_log (bool): If True, enables verbose logging output.
@@ -478,35 +491,41 @@ def check_schema(
         output=output,
         stream=log_stream,
     )
-    log = logging.getLogger("yasl")
-    log.debug(f"YASL Version - {yasl_version()}")
-    log.debug(f"Checking YASL Schema - {yasl_schema}")
+    log = logging.getLogger("darig_schema")
+    log.debug(f"Darig Schema Version - {darig_schema_version()}")
+    log.debug(f"Checking Darig Schema Schema - {darig_schema_schema}")
 
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
     registry.clear_caches()
 
-    yasl_files = []
-    if Path(yasl_schema).is_dir():
-        for p in Path(yasl_schema).rglob("*.yasl"):
-            yasl_files.append(p)
-        if not yasl_files:
-            log.error(f"❌ No .yasl files found in directory '{yasl_schema}'")
+    darig_schema_files = []
+    if Path(darig_schema_schema).is_dir():
+        for p in Path(darig_schema_schema).rglob("*.yasl"):
+            darig_schema_files.append(p)
+        if not darig_schema_files:
+            log.error(
+                f"❌ No .darig_schema files found in directory '{darig_schema_schema}'"
+            )
             return False
-        log.debug(f"Found {len(yasl_files)} .yasl files in directory '{yasl_schema}'")
+        log.debug(
+            f"Found {len(darig_schema_files)} .darig_schema files in directory '{darig_schema_schema}'"
+        )
     else:
-        if not Path(yasl_schema).exists():
-            log.error(f"❌ YASL schema file '{yasl_schema}' not found")
+        if not Path(darig_schema_schema).exists():
+            log.error(f"❌ Darig Schema schema file '{darig_schema_schema}' not found")
             return False
-        yasl_files.append(Path(yasl_schema))
+        darig_schema_files.append(Path(darig_schema_schema))
 
     all_valid = True
-    for yasl_file in yasl_files:
-        yasl = load_schema_files(str(yasl_file))
-        if yasl is None:
-            log.error(f"❌ YASL schema validation failed for '{yasl_file}'.")
+    for darig_schema_file in darig_schema_files:
+        darig_schema = load_schema_files(str(darig_schema_file))
+        if darig_schema is None:
+            log.error(
+                f"❌ Darig Schema schema validation failed for '{darig_schema_file}'."
+            )
             all_valid = False
         else:
-            log.info(f"✅ YASL schema '{yasl_file}' is valid.")
+            log.info(f"✅ Darig Schema schema '{darig_schema_file}' is valid.")
 
     registry.clear_caches()
     return all_valid
@@ -517,7 +536,7 @@ def gen_enum_from_enumerations(namespace: str, enum_defs: dict[str, Enumeration]
     Dynamically generate a Python Enum class from an Enumeration instance.
     Each value in the Enumeration becomes a member of the Enum.
     """
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
     for enum_name, enum_def in enum_defs.items():
         if registry.get_enum(enum_name, namespace) is not None:
             # We skip if it already exists to handle diamond dependencies gracefully
@@ -561,7 +580,7 @@ def _resolve_ref_type(
 
     if not target_def:
         # Check registry for imported/already registered types
-        registry = YaslRegistry()
+        registry = DarigSchemaRegistry()
         target_model = registry.get_type(ref_type_name, ref_type_namespace, namespace)
         if target_model:
             # Find the field in the pydantic model
@@ -621,7 +640,7 @@ def _resolve_ref_type(
 def _resolve_map_type(
     namespace: str,
     all_type_defs: dict[tuple[str, str], TypeDef],
-    registry: YaslRegistry,
+    registry: DarigSchemaRegistry,
     prop_name: str,
     typedef_name: str,
     type_lookup: str,
@@ -706,7 +725,7 @@ def _resolve_map_type(
 def _resolve_simple_type(
     namespace: str,
     all_type_defs: dict[tuple[str, str], TypeDef],
-    registry: YaslRegistry,
+    registry: DarigSchemaRegistry,
     prop_name: str,
     type_lookup: str,
     type_lookup_namespace: str | None,
@@ -732,7 +751,7 @@ def gen_pydantic_type_models(all_type_defs: dict[tuple[str, str], TypeDef]):
     Dynamically generate Pydantic model classes from a list of TypeDef instances.
     Each property in the TypeDef becomes a field in the generated model.
     """
-    registry = YaslRegistry()
+    registry = DarigSchemaRegistry()
 
     # Queue of types to process
     pending_types = list(all_type_defs.items())
@@ -847,7 +866,7 @@ def gen_pydantic_type_models(all_type_defs: dict[tuple[str, str], TypeDef]):
 
                 model = create_model(  # type: ignore
                     typedef_name,
-                    __base__=YASLBaseModel,
+                    __base__=DarigBaseModel,
                     __module__=namespace,
                     __validators__=validators,
                     __config__={"extra": "forbid"},
@@ -890,69 +909,69 @@ def _get_line_for_error(data: Any, loc: tuple[str | int, ...]) -> int | None:
             return None
 
 
-def load_schema(data: dict[str, Any]) -> YaslRoot:
+def load_schema(data: dict[str, Any]) -> DarigSchemaRoot:
     """
-    Load and validate a YASL schema from a dictionary and add the generated types to the registry.
+    Load and validate a Darig Schema schema from a dictionary and add the generated types to the registry.
 
-    This function parses a raw dictionary into a YaslRoot object, generating
+    This function parses a raw dictionary into a DarigSchemaRoot object, generating
     any defined enumerations and Pydantic models in the process. Note that
     schema imports are NOT supported when loading directly from a dictionary;
     use `load_schema_files` if import resolution is required.
 
     Args:
-        data (dict[str, Any]): The raw dictionary containing the YASL schema definition.
+        data (dict[str, Any]): The raw dictionary containing the Darig Schema schema definition.
 
     Returns:
-        YaslRoot: The validated and parsed YASL root object.
+        DarigSchemaRoot: The validated and parsed Darig Schema root object.
 
     Raises:
         ValueError: If the schema defines imports (which are not supported in this mode),
             or if type generation fails (e.g. duplicate definitions, invalid references).
-        ValidationError: If the input data does not match the expected YASL structure.
+        ValidationError: If the input data does not match the expected Darig Schema structure.
     """
-    log = logging.getLogger("yasl")
-    yasl = YaslRoot(**data)
-    if yasl is None:
-        raise ValueError("Failed to parse YASL schema from data {data}")
-    if yasl.imports is not None:
+    log = logging.getLogger("darig_schema")
+    darig_schema = DarigSchemaRoot(**data)
+    if darig_schema is None:
+        raise ValueError("Failed to parse Darig Schema schema from data {data}")
+    if darig_schema.imports is not None:
         log.error(
             "Imports are not supported by the 'load_schema' function.  Use 'load_schema_files' instead."
         )
         raise ValueError(
-            "YASL import not supported when processing from data dictionary."
+            "Darig Schema import not supported when processing from data dictionary."
         )
-    if yasl.metadata is not None:
-        log.debug(f"YASL Metadata: {yasl.metadata}")
+    if darig_schema.metadata is not None:
+        log.debug(f"Darig Schema Metadata: {darig_schema.metadata}")
 
     # Phase 1: Enums
-    if yasl.definitions is not None:
-        for namespace, yasl_item in yasl.definitions.items():
-            if yasl_item.enums is not None:
-                gen_enum_from_enumerations(namespace, yasl_item.enums)
+    if darig_schema.definitions is not None:
+        for namespace, darig_schema_item in darig_schema.definitions.items():
+            if darig_schema_item.enums is not None:
+                gen_enum_from_enumerations(namespace, darig_schema_item.enums)
 
     # Phase 2: Collect Types
     all_types: dict[tuple[str, str], TypeDef] = {}
-    if yasl.definitions is not None:
-        for namespace, yasl_item in yasl.definitions.items():
-            if yasl_item.types is not None:
-                for name, type_def in yasl_item.types.items():
+    if darig_schema.definitions is not None:
+        for namespace, darig_schema_item in darig_schema.definitions.items():
+            if darig_schema_item.types is not None:
+                for name, type_def in darig_schema_item.types.items():
                     all_types[(namespace, name)] = type_def
 
     # Phase 3: Generate Types
     if all_types:
         gen_pydantic_type_models(all_types)
 
-    return yasl
+    return darig_schema
 
 
 def _inject_line_numbers(data: Any, model: BaseModel, file_path: str | None = None):
     """
     Recursively inject line numbers into Pydantic models from ruamel.yaml data.
     """
-    # model.yaml_line is already defined in YASLBaseModel as Optional[int]
-    # but pyright might complain if it doesn't know 'model' is YASLBaseModel.
+    # model.yaml_line is already defined in DarigBaseModel as Optional[int]
+    # but pyright might complain if it doesn't know 'model' is DarigBaseModel.
     # We check isinstance above but pyright might need help.
-    if isinstance(model, YASLBaseModel):
+    if isinstance(model, DarigBaseModel):
         if hasattr(data, "lc") and hasattr(data.lc, "line"):
             model.yaml_line = data.lc.line + 1
         if file_path:
@@ -974,7 +993,7 @@ def _inject_line_numbers(data: Any, model: BaseModel, file_path: str | None = No
 
 def _parse_schema_files_recursive(
     path: str, log: logging.Logger, visited_paths: set[str] | None = None
-) -> list[YaslRoot] | None:
+) -> list[DarigSchemaRoot] | None:
     if visited_paths is None:
         visited_paths = set()
 
@@ -995,15 +1014,15 @@ def _parse_schema_files_recursive(
             docs.extend(yaml_loader.load_all(f))
 
         for data in docs:
-            yasl = YaslRoot(**data)
-            _inject_line_numbers(data, yasl, path)
+            darig_schema = DarigSchemaRoot(**data)
+            _inject_line_numbers(data, darig_schema, path)
 
-            if yasl is None:
-                raise ValueError("Failed to parse YASL schema from data {data}")
+            if darig_schema is None:
+                raise ValueError("Failed to parse Darig Schema schema from data {data}")
 
             # Recurse for imports
-            if yasl.imports is not None:
-                for imp in yasl.imports:
+            if darig_schema.imports is not None:
+                for imp in darig_schema.imports:
                     imp_path = imp
                     if not Path(imp_path).exists():
                         # try relative to current schema file
@@ -1023,29 +1042,33 @@ def _parse_schema_files_recursive(
                         return None
                     results.extend(imported_roots)
 
-            if yasl.metadata is not None:
-                log.debug(f"YASL Metadata: {yasl.metadata}")
+            if darig_schema.metadata is not None:
+                log.debug(f"Darig Schema Metadata: {darig_schema.metadata}")
 
-            results.append(yasl)
+            results.append(darig_schema)
 
         if not results:
-            log.error(f"❌ No YASL schema definitions found in '{path}'")
+            log.error(f"❌ No Darig Schema schema definitions found in '{path}'")
             return None
 
         return results
 
     except FileNotFoundError:
-        log.error(f"❌ Error - YASL schema file not found at '{path}'")
+        log.error(f"❌ Error - Darig Schema schema file not found at '{path}'")
         return None
     except SyntaxError as e:
-        log.error(f"❌ Error - Syntax error in YASL schema file '{path}'\n  - {e}")
+        log.error(
+            f"❌ Error - Syntax error in Darig Schema schema file '{path}'\n  - {e}"
+        )
         return None
     except YAMLError as e:
-        log.error(f"❌ Error - YAML error while parsing YASL schema '{path}'\n  - {e}")
+        log.error(
+            f"❌ Error - YAML error while parsing Darig Schema schema '{path}'\n  - {e}"
+        )
         return None
     except ValidationError as e:
         log.error(
-            f"❌ YASL schema validation of {path} failed with {len(e.errors())} error(s):"
+            f"❌ Darig Schema schema validation of {path} failed with {len(e.errors())} error(s):"
         )
         for error in e.errors():
             line = _get_line_for_error(data, error["loc"])
@@ -1062,46 +1085,46 @@ def _parse_schema_files_recursive(
 
 
 # --- Main schema validation logic ---
-def load_schema_files(path: str) -> list[YaslRoot] | None:
+def load_schema_files(path: str) -> list[DarigSchemaRoot] | None:
     """
-    Load and validate YASL schema(s) from a file.
+    Load and validate Darig Schema schema(s) from a file.
 
-    This function reads a YAML file containing one or more YASL schema definitions.
+    This function reads a YAML file containing one or more Darig Schema schema definitions.
     It recursively resolves any imports specified in the schemas.
     For each valid schema, it generates the corresponding Python Enums and Pydantic models
-    and registers them in the YaslRegistry.
+    and registers them in the DarigSchemaRegistry.
 
     Args:
-        path (str): The file path to the YASL schema file.
+        path (str): The file path to the Darig Schema schema file.
 
     Returns:
-        list[YaslRoot] | None: A list of validated YaslRoot objects if successful,
+        list[DarigSchemaRoot] | None: A list of validated DarigSchemaRoot objects if successful,
         or None if validation fails or the file cannot be read.
 
     Note:
         The function catches most exceptions (FileNotFoundError, YAMLError, ValidationError)
         and logs them as errors, returning None.
     """
-    log = logging.getLogger("yasl")
+    log = logging.getLogger("darig_schema")
 
     # 1. Load all roots recursively
     roots = _parse_schema_files_recursive(path, log)
     if roots is None:
         return None
 
-    if not compile_yasl_roots(roots):
+    if not compile_darig_schema_roots(roots):
         return None
 
-    log.debug("✅ YASL schema validation successful!")
+    log.debug("✅ Darig Schema schema validation successful!")
     return roots
 
 
-def compile_yasl_roots(roots: list[YaslRoot]) -> bool:
+def compile_darig_schema_roots(roots: list[DarigSchemaRoot]) -> bool:
     """
-    Compile a list of YaslRoot objects into Python types and register them.
+    Compile a list of DarigSchemaRoot objects into Python types and register them.
     Performs Enum generation, Type collection, and Pydantic model generation.
     """
-    log = logging.getLogger("yasl")
+    log = logging.getLogger("darig_schema")
 
     # 2. Generate Enums (Pass 1)
     for root in roots:
@@ -1177,10 +1200,10 @@ def load_data(
     yaml_data: dict[str, Any], schema_name: str, schema_namespace: str | None = None
 ) -> Any:
     """
-    Validate a dictionary of data against a specific registered YASL schema.
+    Validate a dictionary of data against a specific registered Darig Schema schema.
 
     This function retrieves the Pydantic model corresponding to the given schema name
-    and namespace from the YaslRegistry, and then attempts to validate the provided
+    and namespace from the DarigSchemaRegistry, and then attempts to validate the provided
     data against it.
 
     Args:
@@ -1196,10 +1219,10 @@ def load_data(
         The function catches ValidationError and SyntaxError, logs the details,
         and returns None.
     """
-    log = logging.getLogger("yasl")
+    log = logging.getLogger("darig_schema")
     try:
         result = None
-        registry = YaslRegistry()
+        registry = DarigSchemaRegistry()
 
         model = registry.get_type(schema_name, schema_namespace)
 
@@ -1231,10 +1254,10 @@ def load_data(
 # --- Main data validation logic ---
 def load_data_files(path: str, model_name: str | None = None) -> Any:
     """
-    Load and validate YAML data from a file against YASL schemas.
+    Load and validate YAML data from a file against Darig Schema schemas.
 
     This function reads a YAML file (which may contain multiple documents) and attempts
-    to validate each document against a registered YASL schema.
+    to validate each document against a registered Darig Schema schema.
 
     If `model_name` is provided, validation is attempted against that specific schema.
     If `model_name` is None, the function attempts to auto-detect the appropriate schema
@@ -1253,7 +1276,7 @@ def load_data_files(path: str, model_name: str | None = None) -> Any:
         The function catches exceptions like FileNotFoundError, SyntaxError, YAMLError,
         and ValidationError, logging them as errors and returning None.
     """
-    log = logging.getLogger("yasl")
+    log = logging.getLogger("darig_schema")
     log.debug(f"--- Attempting to validate data '{path}' ---")
     docs = []
     data = None
@@ -1280,14 +1303,14 @@ def load_data_files(path: str, model_name: str | None = None) -> Any:
         return None
     try:
         results = []
-        registry = YaslRegistry()
+        registry = DarigSchemaRegistry()
         for data in docs:
             candidate_model_names: list[tuple[str, str | None]] = []
             if model_name is None:
                 root_keys: list[str] = list(data.keys())
                 log.debug(f"Auto-detecting schema for YAML root keys in '{path}'")
-                yasl_result = registry.get_types()
-                for type_id, type_def in yasl_result.items() or []:
+                darig_schema_result = registry.get_types()
+                for type_id, type_def in darig_schema_result.items() or []:
                     type_name, type_namespace = type_id
                     type_def_root_keys: list[str] = list(type_def.model_fields.keys())
                     if all(k in type_def_root_keys for k in root_keys):

@@ -8,9 +8,9 @@ from sqlalchemy import JSON, Column, text
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
-from darig.schema.cache import YaslRegistry
+from darig.schema.cache import DarigSchemaRegistry
 from darig.schema.core import load_data_files, load_schema_files
-from darig.schema.pydantic_types import YASLBaseModel
+from darig.schema.pydantic_types import DarigBaseModel
 from darig.schema.sql.types import AstropyQuantityType, PydanticType
 
 # --- Helper functions ---
@@ -44,19 +44,19 @@ def _get_sql_type(annotation: Any) -> Any:
 
     # Complex types (lists, dicts, nested models) -> JSON storage
     # This is a simplification. Ideally, relationships should be used for nested models.
-    # But given the dynamic nature of YASL->SQL mapping requested:
+    # But given the dynamic nature of Darig Schema->SQL mapping requested:
     return (
         Column(PydanticType(annotation))
-        if isinstance(annotation, type) and issubclass(annotation, YASLBaseModel)
+        if isinstance(annotation, type) and issubclass(annotation, DarigBaseModel)
         else Column(JSON)
     )
 
 
-class YaqlEngine:
+class DarigQueryEngine:
     def __init__(self, db_url: str = "sqlite:///:memory:"):
         self.engine = create_engine(db_url)
-        self.registry = YaslRegistry()
-        self.log = logging.getLogger("yaql")
+        self.registry = DarigSchemaRegistry()
+        self.log = logging.getLogger("darig_query")
         self.sql_models: dict[str, type[SQLModel]] = {}
         self._session_maker = sessionmaker(bind=self.engine)  # Standard sessionmaker
 
@@ -66,7 +66,7 @@ class YaqlEngine:
         return Session(self.engine)
 
     def load_schema(self, schema_path: str) -> bool:
-        """Loads YASL schema files and dynamically creates SQLModel classes."""
+        """Loads Darig Schema schema files and dynamically creates SQLModel classes."""
         try:
             # Clear previous state
             SQLModel.metadata.clear()
@@ -242,9 +242,9 @@ class YaqlEngine:
                         )
                         continue
 
-                # 2. Check for Nested YASLBaseModel (New Logic)
+                # 2. Check for Nested DarigBaseModel (New Logic)
                 if isinstance(check_type, type) and issubclass(
-                    check_type, YASLBaseModel
+                    check_type, DarigBaseModel
                 ):
                     # It's a nested model!
                     target_table_name = class_to_table.get(check_type)
@@ -277,10 +277,10 @@ class YaqlEngine:
                     field_info.annotation
                 )  # This will still return JSON for lists/dicts
 
-                # Override _get_sql_type behavior for YASLBaseModel if it slipped through?
-                # _get_sql_type uses PydanticType for YASLBaseModel.
-                # Since we handled YASLBaseModel above, this call shouldn't return PydanticType for them,
-                # UNLESS it's a list[YASLBaseModel] or something not caught by check_type logic.
+                # Override _get_sql_type behavior for DarigBaseModel if it slipped through?
+                # _get_sql_type uses PydanticType for DarigBaseModel.
+                # Since we handled DarigBaseModel above, this call shouldn't return PydanticType for them,
+                # UNLESS it's a list[DarigBaseModel] or something not caught by check_type logic.
 
                 if sa_column is not None:
                     fields[field_name] = Field(sa_column=sa_column, default=None)
@@ -411,7 +411,7 @@ class YaqlEngine:
         """
         from ruamel.yaml import YAML
 
-        from darig.schema.pydantic_types import YASLBaseModel
+        from darig.schema.pydantic_types import DarigBaseModel
 
         path = Path(export_path)
         path.mkdir(parents=True, exist_ok=True)
@@ -460,7 +460,7 @@ class YaqlEngine:
                 # Inspecting the SQLModel class directly might be safer if possible,
                 # but inspecting the Registry is easier for logic.
 
-                # Simplified check: Is it a YASLBaseModel subclass AND NOT a reference?
+                # Simplified check: Is it a DarigBaseModel subclass AND NOT a reference?
                 # We assume ReferenceMarkers were handled/stripped or don't match issubclass directly if wrapped.
                 # But wait, check_type is the raw class.
 
@@ -484,7 +484,7 @@ class YaqlEngine:
                 if (
                     not is_ref
                     and isinstance(check_type, type)
-                    and issubclass(check_type, YASLBaseModel)
+                    and issubclass(check_type, DarigBaseModel)
                 ):
                     # This is a nested relation
                     target_table = pydantic_to_table.get(check_type)
@@ -552,7 +552,7 @@ class YaqlEngine:
                                     )
                                     data[rel["field_name"]] = child_data
 
-                # Remove None values? YASL seems to prefer skipping optional/missing.
+                # Remove None values? Darig Schema seems to prefer skipping optional/missing.
                 # Pydantic dump default usually keeps them as None.
                 # Let's filter None values to be cleaner and match typical YAML style
                 return {k: v for k, v in data.items() if v is not None}
@@ -617,12 +617,12 @@ class YaqlEngine:
                 raise e
 
 
-_yaql_engine = YaqlEngine()
+_darig_query_engine = DarigQueryEngine()
 
 
 def load_schema(schema_path: str) -> bool:
     """
-    Load YASL schema definitions into the global YAQL engine.
+    Load Darig Schema schema definitions into the global Darig Query engine.
 
     Args:
         schema_path: Path to a .yasl file or a directory containing .yasl files.
@@ -630,12 +630,12 @@ def load_schema(schema_path: str) -> bool:
     Returns:
         True if all schemas were loaded successfully, False otherwise.
     """
-    return _yaql_engine.load_schema(schema_path)
+    return _darig_query_engine.load_schema(schema_path)
 
 
 def load_data(data_path: str) -> int:
     """
-    Load YAML data files into the global YAQL engine.
+    Load YAML data files into the global Darig Query engine.
 
     Args:
         data_path: Path to a .yaml/.yml file or a directory containing such files.
@@ -643,12 +643,12 @@ def load_data(data_path: str) -> int:
     Returns:
         The number of data records successfully loaded.
     """
-    return _yaql_engine.load_data(data_path)
+    return _darig_query_engine.load_data(data_path)
 
 
 def export_data(export_path: str, min_mode: bool = False) -> int:
     """
-    Exports the data from the global YAQL engine to YAML files.
+    Exports the data from the global Darig Query engine to YAML files.
 
     Args:
         export_path: Directory where the YAML files will be written.
@@ -657,14 +657,14 @@ def export_data(export_path: str, min_mode: bool = False) -> int:
     Returns:
         Number of files written.
     """
-    return _yaql_engine.export_data(export_path, min_mode=min_mode)
+    return _darig_query_engine.export_data(export_path, min_mode=min_mode)
 
 
 def get_session() -> Session:
     """
-    Get a new SQLModel Session bound to the global YAQL engine.
+    Get a new SQLModel Session bound to the global Darig Query engine.
 
     Returns:
         A new Session object for interacting with the database.
     """
-    return _yaql_engine.session
+    return _darig_query_engine.session

@@ -2,7 +2,7 @@ import subprocess
 import os
 from typing import Any
 from behave import given as _given, when as _when, then as _then
-from darig.query.engine import YaqlEngine
+from darig.query.engine import DarigQueryEngine
 
 # Type cast behave decorators to Any to avoid "Object of type '_StepDecorator' is not callable" errors
 given: Any = _given
@@ -13,7 +13,7 @@ then: Any = _then
 @given('a Darig schema "{schema_file}" is loaded')
 def step_impl_load_schema(context, schema_file):
     if not hasattr(context, "engine"):
-        context.engine = YaqlEngine()
+        context.engine = DarigQueryEngine()
     # Path relative to project root
     abs_path = os.path.abspath(schema_file)
     assert context.engine.load_schema(abs_path) is True

@@ -109,7 +109,7 @@ class TestTypeKeywordValidator:
             type_validator(MockCls, "ref[Namespace.Target]") == "ref[Namespace.Target]"
         )
 
-    @patch("darig.schema.validators.YaslRegistry")
+    @patch("darig.schema.validators.DarigSchemaRegistry")
     def test_user_defined_types(self, mock_registry_cls):
         """Verify registered user types and enums are accepted."""
         mock_registry = mock_registry_cls.return_value
@@ -137,7 +137,7 @@ class TestTypeKeywordValidator:
 
         assert type_validator(MockCls, "MyEnum") == "MyEnum"
 
-    @patch("darig.schema.validators.YaslRegistry")
+    @patch("darig.schema.validators.DarigSchemaRegistry")
     def test_unknown_type_with_hint(self, mock_registry_cls):
         """Verify helpful error message when type exists in another namespace."""
         mock_registry = mock_registry_cls.return_value

@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from darig.schema.cache import YaslRegistry
+from darig.schema.cache import DarigSchemaRegistry
 from darig.schema.core import load_data_files, load_schema_files
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
@@ -10,7 +10,7 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 @pytest.fixture
 def registry():
-    reg = YaslRegistry()
+    reg = DarigSchemaRegistry()
     reg.clear_caches()
     return reg
 

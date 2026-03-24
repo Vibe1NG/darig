@@ -1,12 +1,12 @@
-![darig](./AdvancedYamlLogo.png)
+![darig](./DarigLogo.png)
 
 # Darig
 
 Darig is a suite of tools that streamline data management of structured data in YAML.
 
 These tools include:
- - [YASL](./src/darig/schema/README.md) - YAML Advanced Schema Language
- - [YAQL](./src/darig/query/README.md) - YAML Advanced Query Language
+ - [Darig Schema](./src/darig/schema/README.md) - Data validation and schema enforcement
+ - [Darig Query](./src/darig/query/README.md) - Query your YAML using standard SQL queries
 
 ## Vision & Inspiration
 

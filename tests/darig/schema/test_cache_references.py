@@ -5,13 +5,13 @@ import yaml
 from pydantic import BaseModel
 
 from darig.schema import load_schema
-from darig.schema.cache import YaslRegistry
+from darig.schema.cache import DarigSchemaRegistry
 from darig.schema.primitives import ReferenceMarker
 
 
 @pytest.fixture
 def registry():
-    reg = YaslRegistry()
+    reg = DarigSchemaRegistry()
     reg.clear_caches()
     return reg
 

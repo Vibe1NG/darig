@@ -1,13 +1,13 @@
 import os
 import unittest
 
-from darig.schema.cache import YaslRegistry
-from darig.schema.core import check_schema, yasl_eval
+from darig.schema.cache import DarigSchemaRegistry
+from darig.schema.core import check_schema, darig_eval
 
 
 class TestYaslForwardReferences(unittest.TestCase):
     def setUp(self):
-        self.registry = YaslRegistry()
+        self.registry = DarigSchemaRegistry()
         self.registry.clear_caches()
         self.schema_file = os.path.join(
             os.path.dirname(__file__), "data/forward_ref.yasl"
@@ -27,8 +27,8 @@ class TestYaslForwardReferences(unittest.TestCase):
     def test_forward_references_data_validation(self):
         """Test that data can be validated against a schema with forward references."""
         # Ensure schema is loaded first implicitly by check_schema or explicitly if needed,
-        # but yasl_eval handles loading schema.
-        results = yasl_eval(self.schema_file, self.data_file)
+        # but darig_eval handles loading schema.
+        results = darig_eval(self.schema_file, self.data_file)
         self.assertIsNotNone(results, "Data validation should succeed")
         if results is None:  # Guard for type checking
             return

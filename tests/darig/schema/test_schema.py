@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from darig.cli import main as yasl_cli_main
-from darig.schema import yasl_eval
+from darig.schema import darig_eval
 
 from .schema_data import (
     CUSTOMER_LIST_YASL,
@@ -108,7 +108,7 @@ def run_eval_command(yaml_data, yasl_schema, model_name, expect_valid):
 def run_eval_command_with_paths(yaml_path, yasl_path, model_name, expect_valid):
     # Test via the API
     test_log = StringIO()
-    yasl_model = yasl_eval(
+    yasl_model = darig_eval(
         yasl_path,
         yaml_path,
         model_name,

@@ -3,7 +3,7 @@ from enum import Enum
 import pytest
 from pydantic import BaseModel, Field
 
-from darig.schema.cache import YaslRegistry
+from darig.schema.cache import DarigSchemaRegistry
 
 
 # --- Test Data ---
@@ -24,7 +24,7 @@ class User(BaseModel):
 # --- Fixtures ---
 @pytest.fixture
 def registry():
-    reg = YaslRegistry()
+    reg = DarigSchemaRegistry()
     reg.clear_caches()
     return reg
 
@@ -33,8 +33,8 @@ def registry():
 
 
 def test_singleton_behavior():
-    reg1 = YaslRegistry()
-    reg2 = YaslRegistry()
+    reg1 = DarigSchemaRegistry()
+    reg2 = DarigSchemaRegistry()
     assert reg1 is reg2
 
 
