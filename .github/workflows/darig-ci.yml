@@ -1,4 +1,4 @@
-name: YASL CI
+name: Darig CI
 permissions:
   contents: read
 
@@ -11,7 +11,7 @@ on:
       - main
 
 jobs:
-  yasl-ci:
+  darig-ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -57,7 +57,7 @@ jobs:
           ./ci.sh docs
 
   check-build:
-    needs: [yasl-ci]
+    needs: [darig-ci]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository

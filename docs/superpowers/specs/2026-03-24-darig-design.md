@@ -17,8 +17,8 @@ The new package structure will be consolidated under `src/darig/`:
 - `src/darig/`
     - `__init__.py`
     - `cli.py`: Main entry point for the `darig` command.
-    - `schema/`: Core logic for YASL schema validation.
-    - `query/`: Core logic for YAQL data querying.
+    - `schema/`: Core logic for Darig schema validation.
+    - `query/`: Core logic for Darig data querying.
     - `common/`: Shared utilities, versioning, and unified error handling.
 
 ### Removed Components

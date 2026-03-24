@@ -3,9 +3,9 @@ Feature: Darig GitHub Actions Schema Validation
   I want to validate my GitHub Actions yaml
   So that I can ensure correctness of my workflows
 
-  Scenario: Validating the yasl-ci.yml file against the GitHub Actions schema
+  Scenario: Validating the darig-ci.yml file against the GitHub Actions schema
     Given a Darig schema "schemas/gh_actions/github_actions.yasl" is provided
-    And a YAML document ".github/workflows/yasl-ci.yml" is provided
+    And a YAML document ".github/workflows/darig-ci.yml" is provided
     And the model name "github_actions" is provided
     When I run the Darig CLI with provided arguments
     Then the validation should pass

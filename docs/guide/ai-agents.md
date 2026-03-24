@@ -43,34 +43,10 @@ definitions:
 
 ## 2. Supported Primitives
 
-YASL supports a rich set of primitives. **You must use these exact type names.**
-
-### Standard Types
-*   `str` / `string`: Text.
-*   `int`: Integer.
-*   `float`: Floating-point number.
-*   `bool`: Boolean (`true`/`false`).
-*   `any`: Any valid YAML value.
-
-### Time & Date
-*   `date`: ISO 8601 Date (`YYYY-MM-DD`).
-*   `datetime`: ISO 8601 DateTime (`YYYY-MM-DDTHH:MM:SS`).
-*   `clocktime`: Time of day (`HH:MM:SS`).
-
-### Filesystem & Network
-*   `path`: A file system path.
-*   `url`: A web URL.
-
-### Collections
-*   `<Type>[]`: A list of items (e.g., `str[]`, `int[]`, `common.Address[]`).
-*   `map[<KeyType>, <ValueType>]`: A dictionary. Keys must be `str`, `int`, or an Enum. (e.g., `map[str, int]`).
-
-### References
-*   `ref[<Type>]`: A reference to another object defined elsewhere in the data. The referenced object must have a property marked with `unique: true`.
-    *   Example: `owner: { type: ref[User] }` matches a User's unique identifier.
-
+Darig supports a rich set of primitives. **You must use these exact type names.**
+...
 ### Physical Quantities (SI Units)
-YASL parses strings with units into physical quantities.
+Darig parses strings with units into physical quantities.
 *   `length` (e.g., "10 m", "5 km")
 *   `mass` (e.g., "5 kg", "100 g")
 *   `time` (e.g., "10 s", "2 min") - *Physical duration, distinct from `clocktime`.*

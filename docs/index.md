@@ -5,7 +5,7 @@
 ## Key Features
 
 *   **Schema Validation:** Define strict schemas for your YAML data to ensure consistency and validity.
-*   **Data Querying (YAQL):** Query your YAML files as if they were a database. Perform complex searches, filtering, and aggregations.
+*   **Data Querying (Darig query):** Query your YAML files as if they were a database. Perform complex searches, filtering, and aggregations.
 
 ## Getting Started
 

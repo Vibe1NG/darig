@@ -1,61 +1,16 @@
 # Schema Primitive Types
 
-YASL provides a rich set of primitive types to ensure your data is validated correctly. These include standard Python types, Pydantic's robust validation types, and even physical quantities with units.
-
-## Standard Types
-
-The foundational types you use every day.
-
-*   `str` or `string`: Standard text.
-*   `int`: Integer numbers.
-*   `float`: Floating-point numbers.
-*   `bool`: Boolean values (`true`/`false`).
-*   `date`: ISO 8601 dates (e.g., `2023-12-31`).
-*   `datetime`: ISO 8601 date-times (e.g., `2023-12-31T23:59:59`).
-*   `clocktime`: Time of day (e.g., `14:30:00`). Note: Renamed from `time` to avoid conflict with physical time units.
-*   `path`: Filesystem paths.
-*   `url`: Standard URLs.
-*   `any`: Accepts any value.
-*   `map[<KeyType>, <ValueType>]`: Dictionary of key-value pairs (e.g., `map[str, int]`).
-*   `ref[<target>]`: Reference to another unique property. See [Using References](references.md).
-*   `type`: Validates that the value is a valid YASL type signature (e.g., `int`, `str`, `map[str, int]`, or a registered type `MyType`).
-*   `markdown`: Validates that the value is valid Markdown text.
-
+Darig provides a rich set of primitive types to ensure your data is validated correctly. These include standard Python types, Pydantic's robust validation types, and even physical quantities with units.
+...
+*   `type`: Validates that the value is a valid Darig type signature (e.g., `int`, `str`, `map[str, int]`, or a registered type `MyType`).
+...
 ## Pydantic Types
 
-YASL supports the full suite of Pydantic's specialized types for stricter validation.
-
-### Numbers
-*   `PositiveInt`, `NegativeInt`
-*   `NonPositiveInt`, `NonNegativeInt`
-*   `StrictInt`, `StrictFloat`, `StrictBool`
-*   `PositiveFloat`, `NegativeFloat`
-*   `FiniteFloat`
-
-### Identifiers & Encoding
-*   `UUID1`, `UUID3`, `UUID4`, `UUID5`, `UUID6`, `UUID7`, `UUID8`
-*   `Base64Bytes`, `Base64Str`
-*   `Base64UrlBytes`, `Base64UrlStr`
-
-### Networking & Web
-*   `EmailStr`, `NameEmail`
-*   `IPvAnyAddress`
-*   `AnyUrl`, `HttpUrl`, `FileUrl`, `FtpUrl`
-*   `AnyWebsocketUrl`, `WebsocketUrl`
-
-### Database DSNs
-*   `PostgresDsn`, `MySQLDsn`, `MariaDBDsn`
-*   `MongoDsn`, `RedisDsn`
-*   `KafkaDsn`, `AmqpDsn`, `NatsDsn`
-*   `ClickHouseDsn`, `CockroachDsn`, `SnowflakeDsn`
-
-### Filesystem
-*   `FilePath`: Validates that the file exists.
-*   `DirectoryPath`: Validates that the directory exists.
-
+Darig supports the full suite of Pydantic's specialized types for stricter validation.
+...
 ## Physical Quantities (SI Units)
 
-YASL allows you to define fields that require physical units (e.g., meters, seconds, kilograms). These types validate that the input string contains both a number and a compatible unit.
+Darig allows you to define fields that require physical units (e.g., meters, seconds, kilograms). These types validate that the input string contains both a number and a compatible unit.
 
 **Example:**
 ```yaml
