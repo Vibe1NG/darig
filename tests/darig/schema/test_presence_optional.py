@@ -4,8 +4,8 @@ from darig.schema import yasl_eval
 
 
 def test_presence_optional_missing():
-    schema_path = "tests/yasl/data/presence_optional.yasl"
-    data_path = "tests/yasl/data/presence_optional_missing.yaml"
+    schema_path = "tests/darig/schema/data/presence_optional.yasl"
+    data_path = "tests/darig/schema/data/presence_optional_missing.yaml"
 
     stream = StringIO()
     # Should pass without warnings
@@ -25,8 +25,8 @@ def test_presence_optional_missing():
 
 def test_presence_default_is_optional():
     # 'bio' has no presence attribute, so it should be optional by default
-    schema_path = "tests/yasl/data/presence_optional.yasl"
-    data_path = "tests/yasl/data/presence_optional_missing.yaml"
+    schema_path = "tests/darig/schema/data/presence_optional.yasl"
+    data_path = "tests/darig/schema/data/presence_optional_missing.yaml"
 
     stream = StringIO()
     result = yasl_eval(schema_path, data_path, "person_optional", log_stream=stream)

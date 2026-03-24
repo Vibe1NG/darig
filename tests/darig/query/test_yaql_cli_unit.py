@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from darig.query.cli import YaqlShell
+from darig.cli import YaqlShell
 
 
 @pytest.fixture
@@ -154,12 +154,12 @@ def test_cli_launch_and_quit_simulated(capsys, caplog):
     Test the main() function by mocking sys.argv and inputs.
     We need to handle the fact that main() sets up logging and runs cmdloop.
     """
-    from darig.query.cli import main
+    from darig.cli import main
 
     # We need to mock input to return 'quit' immediately
     with (
         patch("builtins.input", side_effect=["quit"]),
-        patch("sys.argv", ["yaql"]),
+        patch("sys.argv", ["darig", "query"]),
         patch("logging.basicConfig") as mock_basic_config,
         caplog.at_level(logging.INFO),
     ):
@@ -178,24 +178,24 @@ def test_cli_launch_and_quit_simulated(capsys, caplog):
 
 def test_cli_arguments_version_simulated(capsys):
     """Test main() with --version."""
-    from darig.query.cli import main
+    from darig.cli import main
 
-    with patch("sys.argv", ["yaql", "--version"]):
+    with patch("sys.argv", ["darig", "--version"]):
         with pytest.raises(SystemExit) as e:
             main()
         assert e.value.code == 0
 
     captured = capsys.readouterr()
-    assert "YAQL version" in captured.out
+    assert "Darig version" in captured.out
 
 
 def test_cli_arguments_quiet_simulated(capsys, caplog):
     """Test main() with --quiet."""
-    from darig.query.cli import main
+    from darig.cli import main
 
     with (
         patch("builtins.input", side_effect=["quit"]),
-        patch("sys.argv", ["yaql", "--quiet"]),
+        patch("sys.argv", ["darig", "--quiet", "query"]),
         patch("logging.basicConfig") as mock_basic_config,
         caplog.at_level(logging.ERROR),
     ):
@@ -213,11 +213,11 @@ def test_cli_arguments_quiet_simulated(capsys, caplog):
 
 def test_cli_arguments_verbose_simulated(capsys, caplog):
     """Test main() with --verbose."""
-    from darig.query.cli import main
+    from darig.cli import main
 
     with (
         patch("builtins.input", side_effect=["quit"]),
-        patch("sys.argv", ["yaql", "--verbose"]),
+        patch("sys.argv", ["darig", "--verbose", "query"]),
         patch("logging.basicConfig") as mock_basic_config,
         caplog.at_level(logging.DEBUG),
     ):
@@ -234,9 +234,9 @@ def test_cli_arguments_verbose_simulated(capsys, caplog):
 
 def test_cli_conflicting_args_simulated(capsys):
     """Test main() with both --quiet and --verbose."""
-    from darig.query.cli import main
+    from darig.cli import main
 
-    with patch("sys.argv", ["yaql", "--quiet", "--verbose"]):
+    with patch("sys.argv", ["darig", "--quiet", "--verbose", "query"]):
         with pytest.raises(SystemExit) as e:
             main()
         assert e.value.code == 1
@@ -244,11 +244,11 @@ def test_cli_conflicting_args_simulated(capsys):
 
 def test_cli_load_schema_on_startup(capsys, caplog):
     """Test main() with --schema."""
-    from darig.query.cli import main
+    from darig.cli import main
 
     with (
         patch("builtins.input", side_effect=["quit"]),
-        patch("sys.argv", ["yaql", "--schema", "path/to/schema"]),
+        patch("sys.argv", ["darig", "query", "--schema", "path/to/schema"]),
         patch("logging.basicConfig"),
         patch(
             "darig.query.engine.YaqlEngine.load_schema", return_value=True
@@ -264,13 +264,13 @@ def test_cli_load_schema_on_startup(capsys, caplog):
 
 def test_cli_load_data_on_startup_success(capsys, caplog):
     """Test main() with --schema and --data."""
-    from darig.query.cli import main
+    from darig.cli import main
 
     with (
         patch("builtins.input", side_effect=["quit"]),
         patch(
             "sys.argv",
-            ["yaql", "--schema", "path/to/schema", "--data", "path/to/data"],
+            ["darig", "query", "--schema", "path/to/schema", "--data", "path/to/data"],
         ),
         patch("logging.basicConfig"),
         patch(
@@ -293,9 +293,9 @@ def test_cli_load_data_on_startup_success(capsys, caplog):
 
 def test_cli_load_data_without_schema_error(capsys):
     """Test main() with --data but no --schema."""
-    from darig.query.cli import main
+    from darig.cli import main
 
-    with patch("sys.argv", ["yaql", "--data", "path/to/data"]):
+    with patch("sys.argv", ["darig", "query", "--data", "path/to/data"]):
         with pytest.raises(SystemExit) as e:
             main()
         assert e.value.code == 1

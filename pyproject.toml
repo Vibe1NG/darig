@@ -72,12 +72,12 @@ minversion = "6.0"
 addopts = "-ra -q --cov=src --cov-report=html --cov-fail-under=75"
 pythonpath = ["src"]
 testpaths = [
-    "tests/yasl",
-    "tests/yaql",
+    "tests/darig/schema",
+    "tests/darig/query",
 ]
 
 [tool.behave]
-paths = ["features/yasl", "features/yaql"]
+paths = ["features/darig/schema", "features/darig/query"]
 format = ["pretty"]
 
 [tool.uv]

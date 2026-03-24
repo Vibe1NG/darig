@@ -1,4 +1,4 @@
-# features/yasl/steps/yasl_steps.py
+# features/darig/schema/steps/yasl_steps.py
 
 import os
 import subprocess
@@ -17,7 +17,7 @@ then: Any = _then
 
 def run_cli(args):
     filtered_args = [item for item in args if item is not None]
-    result = subprocess.run(["yasl"] + filtered_args, capture_output=True, text=True)
+    result = subprocess.run(["darig"] + filtered_args, capture_output=True, text=True)
     return result
 
 

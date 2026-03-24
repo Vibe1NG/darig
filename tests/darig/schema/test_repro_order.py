@@ -2,7 +2,7 @@ import os
 
 from darig.schema.core import load_schema_files
 
-path = "tests/yasl/repro_order.yasl"
+path = "tests/darig/schema/repro_order.yasl"
 if os.path.exists(path):
     print(f"Testing {path}")
     result = load_schema_files(path)

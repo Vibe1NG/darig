@@ -4,8 +4,8 @@ from darig.schema import yasl_eval
 
 
 def test_presence_required_valid():
-    schema_path = "tests/yasl/data/presence_required.yasl"
-    data_path = "tests/yasl/data/presence_required_valid.yaml"
+    schema_path = "tests/darig/schema/data/presence_required.yasl"
+    data_path = "tests/darig/schema/data/presence_required_valid.yaml"
 
     # Should pass
     result = yasl_eval(schema_path, data_path, "person", quiet_log=True)
@@ -13,8 +13,8 @@ def test_presence_required_valid():
 
 
 def test_presence_required_warn():
-    schema_path = "tests/yasl/data/presence_required.yasl"
-    data_path = "tests/yasl/data/presence_required_warn.yaml"
+    schema_path = "tests/darig/schema/data/presence_required.yasl"
+    data_path = "tests/darig/schema/data/presence_required_warn.yaml"
 
     stream = StringIO()
     # Should pass but warn
@@ -26,8 +26,8 @@ def test_presence_required_warn():
 
 
 def test_presence_required_invalid():
-    schema_path = "tests/yasl/data/presence_required.yasl"
-    data_path = "tests/yasl/data/presence_required_invalid.yaml"
+    schema_path = "tests/darig/schema/data/presence_required.yasl"
+    data_path = "tests/darig/schema/data/presence_required_invalid.yaml"
 
     # Should fail
     result = yasl_eval(schema_path, data_path, "person", quiet_log=True)

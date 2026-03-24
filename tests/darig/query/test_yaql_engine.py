@@ -6,7 +6,7 @@ from sqlmodel import SQLModel
 from darig.query.engine import YaqlEngine
 from darig.schema.cache import YaslRegistry
 
-YASL_DIR = Path("tests/yaql/data")
+YASL_DIR = Path("tests/darig/query/data")
 
 
 @pytest.fixture(autouse=True)

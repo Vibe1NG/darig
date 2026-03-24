@@ -6,7 +6,7 @@ from darig.query.engine import export_data, load_data, load_schema
 
 def test_export_data():
     # Setup paths
-    base_dir = Path("tests/yaql/export_test_data")
+    base_dir = Path("tests/darig/query/export_test_data")
     if base_dir.exists():
         shutil.rmtree(base_dir)
     base_dir.mkdir(parents=True)
@@ -112,7 +112,7 @@ items:
 
 def test_export_data_min_mode():
     # Setup paths
-    base_dir = Path("tests/yaql/export_test_min_mode")
+    base_dir = Path("tests/darig/query/export_test_min_mode")
     if base_dir.exists():
         shutil.rmtree(base_dir)
     base_dir.mkdir(parents=True)

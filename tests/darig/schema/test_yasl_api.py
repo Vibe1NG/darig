@@ -8,7 +8,7 @@ from darig.schema.core import (
 )
 
 try:
-    from tests.yasl.schema_data import TODO_YASL
+    from tests.darig.schema.schema_data import TODO_YASL
 except ImportError:
     # Fallback for when running tests directly or in different environments
     try:
