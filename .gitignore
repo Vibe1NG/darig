@@ -55,3 +55,4 @@ reports/
 codeql-db/
 codeql-results.csv
 
+.worktrees/
