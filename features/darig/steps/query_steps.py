@@ -1,7 +1,11 @@
-import subprocess
 import os
+import subprocess
 from typing import Any
-from behave import given as _given, when as _when, then as _then
+
+from behave import given as _given
+from behave import then as _then
+from behave import when as _when
+
 from darig.query.engine import DarigQueryEngine
 
 # Type cast behave decorators to Any to avoid "Object of type '_StepDecorator' is not callable" errors
