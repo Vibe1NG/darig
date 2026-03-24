@@ -1,5 +1,5 @@
 [project]
-name = "advanced-yaml"
+name = "darig"
 version = "0.5.0"
 description = "A suite of tools to advance your usage of yaml.  YASL provides schema definition and verification.  YAQL let's you query your yalm as if it were a database.  YARL provides analysis and reporting.  And YATL allows you to transform yaml from one structure (schema) to another."
 readme = "pypi_readme.md"
@@ -49,10 +49,7 @@ dev = [
 ]
 
 [project.scripts]
-yasl = "yasl.cli:main"
-yaql = "yaql.cli:main"
-yarl = "yarl.cli:main"
-yatl = "yatl.cli:main"
+darig = "darig.cli:main"
 
 [dependency-groups]
 dev = [
@@ -75,12 +72,10 @@ pythonpath = ["src"]
 testpaths = [
     "tests/yasl",
     "tests/yaql",
-    "tests/yarl",
-    "tests/yatl",
 ]
 
 [tool.behave]
-paths = ["features/yasl", "features/yaql", "features/yarl", "features/yatl"]
+paths = ["features/yasl", "features/yaql"]
 format = ["pretty"]
 
 [tool.uv]

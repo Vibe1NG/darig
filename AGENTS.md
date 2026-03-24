@@ -1,6 +1,6 @@
-# advanced-yaml Agent Guidelines
+# Darig Agent Guidelines
 
-This document provides comprehensive instructions for AI agents operating within the `advanced-yaml` repository. Follow these guidelines strictly to ensure code quality, consistency, and stability.
+This document provides comprehensive instructions for AI agents operating within the `darig` repository. Follow these guidelines strictly to ensure code quality, consistency, and stability.
 
 ## 1. Environment & Toolchain
 
@@ -55,8 +55,6 @@ The project uses **uv** for dependency management and task execution. All comman
 The project is modularized by functionality:
 *   `src/yasl/`: **YASL** (YAML Advanced Scripting Language) - Schema definition & verification.
 *   `src/yaql/`: **YAQL** (YAML Advanced Query Language) - Querying capabilities.
-*   `src/yarl/`: **YARL** (YAML Advanced Reporting Language) - Analysis & reporting.
-*   `src/yatl/`: **YATL** (YAML Advanced Transformation Language) - Structure transformation.
 *   `tests/`: Unit tests mirroring the `src` structure.
 *   `features/`: Gherkin feature files for BDD.
 
