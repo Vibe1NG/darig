@@ -1,4 +1,4 @@
-from yasl import check_schema
+from darig.schema import check_schema
 
 
 def test_import_ref_valid():

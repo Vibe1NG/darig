@@ -4,7 +4,7 @@ import astropy.units as u
 import pytest
 from pydantic import BaseModel
 
-from yasl.sql.types import AstropyQuantityType, PydanticType
+from darig.schema.sql.types import AstropyQuantityType, PydanticType
 
 # --- Fixtures / Setup ---
 

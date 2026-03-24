@@ -4,8 +4,8 @@ from io import StringIO
 
 import pytest
 
-from yasl import yasl_eval
-from yasl.primitives import PRIMITIVE_TYPE_MAP
+from darig.schema import yasl_eval
+from darig.schema.primitives import PRIMITIVE_TYPE_MAP
 
 
 def run_eval_command(yaml_data, yasl_schema, model_name, expect_valid):

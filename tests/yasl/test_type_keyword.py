@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from yasl.validators import type_validator
+from darig.schema.validators import type_validator
 
 
 # Dummy class for the validator's 'cls' argument
@@ -109,7 +109,7 @@ class TestTypeKeywordValidator:
             type_validator(MockCls, "ref[Namespace.Target]") == "ref[Namespace.Target]"
         )
 
-    @patch("yasl.validators.YaslRegistry")
+    @patch("darig.schema.validators.YaslRegistry")
     def test_user_defined_types(self, mock_registry_cls):
         """Verify registered user types and enums are accepted."""
         mock_registry = mock_registry_cls.return_value
@@ -137,7 +137,7 @@ class TestTypeKeywordValidator:
 
         assert type_validator(MockCls, "MyEnum") == "MyEnum"
 
-    @patch("yasl.validators.YaslRegistry")
+    @patch("darig.schema.validators.YaslRegistry")
     def test_unknown_type_with_hint(self, mock_registry_cls):
         """Verify helpful error message when type exists in another namespace."""
         mock_registry = mock_registry_cls.return_value

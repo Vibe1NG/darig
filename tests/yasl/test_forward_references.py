@@ -1,8 +1,8 @@
 import os
 import unittest
 
-from yasl.cache import YaslRegistry
-from yasl.core import check_schema, yasl_eval
+from darig.schema.cache import YaslRegistry
+from darig.schema.core import check_schema, yasl_eval
 
 
 class TestYaslForwardReferences(unittest.TestCase):

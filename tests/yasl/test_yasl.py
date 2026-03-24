@@ -27,8 +27,8 @@ from schema_data import (
     TODO_YASL,
 )
 
-from yasl import yasl_eval
-from yasl.cli import main as yasl_cli_main
+from darig.schema import yasl_eval
+from darig.schema.cli import main as yasl_cli_main
 
 
 def run_cli(args):

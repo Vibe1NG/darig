@@ -1,7 +1,7 @@
 import pytest
 
-from yasl.cache import YaslRegistry
-from yasl.core import load_schema
+from darig.schema.cache import YaslRegistry
+from darig.schema.core import load_schema
 
 
 def setup_function():

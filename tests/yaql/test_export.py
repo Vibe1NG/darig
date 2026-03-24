@@ -1,7 +1,7 @@
 import shutil
 from pathlib import Path
 
-from yaql.engine import export_data, load_data, load_schema
+from darig.query.engine import export_data, load_data, load_schema
 
 
 def test_export_data():

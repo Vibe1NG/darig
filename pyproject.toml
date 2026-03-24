@@ -49,7 +49,9 @@ dev = [
 ]
 
 [project.scripts]
-darig = "darig.cli:main"
+yasl = "darig.schema.cli:main"
+yaql = "darig.query.cli:main"
+# darig = "darig.cli:main"
 
 [dependency-groups]
 dev = [

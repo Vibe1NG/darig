@@ -2,8 +2,8 @@ import os
 
 import pytest
 
-from yasl.cache import YaslRegistry
-from yasl.core import load_data_files, load_schema_files
+from darig.schema.cache import YaslRegistry
+from darig.schema.core import load_data_files, load_schema_files
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 

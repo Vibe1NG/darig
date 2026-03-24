@@ -3,7 +3,7 @@ from enum import Enum
 import pytest
 from pydantic import BaseModel, Field
 
-from yasl.cache import YaslRegistry
+from darig.schema.cache import YaslRegistry
 
 
 # --- Test Data ---

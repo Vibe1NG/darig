@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from yasl.primitives import ReferenceMarker
+from darig.schema.primitives import ReferenceMarker
 
 
 def test_reference_marker_init():

@@ -2,7 +2,7 @@ import pytest
 import yaml
 from pydantic import ValidationError
 
-from yasl.core import (
+from darig.schema.core import (
     load_data,
     load_schema,
 )
@@ -88,7 +88,7 @@ def test_yaml_data_validation_errors():
     """Test that YAML data validation correctly identifies errors against the schema."""
 
     # Setup: Load a valid schema. We need to clear registry first because previous tests might have registered it.
-    from yasl.cache import YaslRegistry
+    from darig.schema.cache import YaslRegistry
 
     YaslRegistry().clear_caches()
 

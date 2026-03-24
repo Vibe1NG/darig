@@ -1,6 +1,6 @@
 from io import StringIO
 
-from yasl import yasl_eval
+from darig.schema import yasl_eval
 
 
 def test_presence_required_valid():

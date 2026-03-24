@@ -2,7 +2,7 @@ import os
 import tempfile
 from io import StringIO
 
-from yasl import yasl_eval
+from darig.schema import yasl_eval
 
 
 def run_eval_command(yaml_data, yasl_schema, model_name, expect_valid):

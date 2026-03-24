@@ -1,6 +1,6 @@
 import os
 
-from yasl.core import load_schema_files
+from darig.schema.core import load_schema_files
 
 path = "tests/yasl/repro_order.yasl"
 if os.path.exists(path):

@@ -4,9 +4,9 @@ import pytest
 import yaml
 from pydantic import BaseModel
 
-from yasl import load_schema
-from yasl.cache import YaslRegistry
-from yasl.primitives import ReferenceMarker
+from darig.schema import load_schema
+from darig.schema.cache import YaslRegistry
+from darig.schema.primitives import ReferenceMarker
 
 
 @pytest.fixture

@@ -3,8 +3,8 @@ from pathlib import Path
 import pytest
 from sqlmodel import SQLModel
 
-from yaql.engine import YaqlEngine
-from yasl.cache import YaslRegistry
+from darig.query.engine import YaqlEngine
+from darig.schema.cache import YaslRegistry
 
 YASL_DIR = Path("tests/yaql/data")
 
