@@ -6,8 +6,8 @@ YASL supports definition and validation of data structures with primitives, enum
 YASL also supports references between types and properties, enabling complex data models.
 """
 
-from yasl.cache import get_yasl_registry
-from yasl.core import (
+from darig.schema.cache import get_yasl_registry
+from darig.schema.core import (
     check_paths,
     check_schema,
     load_data,

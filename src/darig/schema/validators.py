@@ -12,9 +12,9 @@ import numpy as np
 import requests
 from pydantic import field_validator, model_validator
 
-from yasl.cache import YaslRegistry
-from yasl.pydantic_types import IfThen, Property, TypeDef
-from yasl.validator_helpers import _ensure_comparable
+from darig.schema.cache import YaslRegistry
+from darig.schema.pydantic_types import IfThen, Property, TypeDef
+from darig.schema.validator_helpers import _ensure_comparable
 
 
 def unique_value_validator(
@@ -419,7 +419,7 @@ def map_validator(
 # type validator
 def type_validator(cls, value: str, namespace: str | None = None):
     registry = YaslRegistry()
-    from yasl.primitives import PRIMITIVE_TYPE_MAP
+    from darig.schema.primitives import PRIMITIVE_TYPE_MAP
 
     # 1. Check if it's a primitive type
     if value in PRIMITIVE_TYPE_MAP:

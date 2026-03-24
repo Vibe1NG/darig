@@ -5,8 +5,8 @@ YASL CLI main entry point.
 import argparse
 import sys
 
-from common import darig_version
-from yasl import check_paths, check_schema
+from darig.common import darig_version
+from darig.schema import check_paths, check_schema
 
 
 def get_parser():

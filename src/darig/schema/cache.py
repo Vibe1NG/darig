@@ -233,7 +233,7 @@ class YaslRegistry:
 
                     # Handle Annotated types for References
                     if origin is Annotated:
-                        from yasl.primitives import ReferenceMarker
+                        from darig.schema.primitives import ReferenceMarker
 
                         for arg in args:
                             if isinstance(arg, ReferenceMarker):
@@ -292,7 +292,7 @@ class YaslRegistry:
 
                 # Check for metadata first (Pydantic v2 moves Annotated args to metadata for top-level fields)
                 yasl_type = None
-                from yasl.primitives import ReferenceMarker
+                from darig.schema.primitives import ReferenceMarker
 
                 if field.metadata:
                     for meta in field.metadata:

@@ -19,10 +19,11 @@ from pydantic import (
 )
 from ruamel.yaml import YAML, YAMLError
 
-from yasl.cache import YaslRegistry
-from yasl.primitives import PRIMITIVE_TYPE_MAP, ReferenceMarker
-from yasl.pydantic_types import Enumeration, TypeDef, YASLBaseModel, YaslRoot
-from yasl.validators import property_validator_factory, type_validator_factory
+from darig.common.utils import darig_version
+from darig.schema.cache import YaslRegistry
+from darig.schema.primitives import PRIMITIVE_TYPE_MAP, ReferenceMarker
+from darig.schema.pydantic_types import Enumeration, TypeDef, YASLBaseModel, YaslRoot
+from darig.schema.validators import property_validator_factory, type_validator_factory
 
 
 # --- Logging Setup ---
@@ -87,19 +88,12 @@ def _setup_logging(
 
 def yasl_version() -> str:
     """
-    Get the version of the YASL package.
+    Get the version of the darig package.
 
     Returns:
-        str: The version string defined in pyproject.toml, or an error message if the file cannot be read.
+        str: The version string.
     """
-    try:
-        pyproject_path = os.path.join(os.path.dirname(__file__), "../../pyproject.toml")
-        with open(pyproject_path, "rb") as f:
-            pyproject = tomllib.load(f)
-        return pyproject["project"]["version"]
-    except Exception:
-        # fallback to old version if pyproject.toml is missing or malformed
-        return "Unknown due to internal error reading pyproject.toml"
+    return darig_version()
 
 
 def yasl_eval(

@@ -8,10 +8,10 @@ from sqlalchemy import JSON, Column, text
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
-from yasl.cache import YaslRegistry
-from yasl.core import load_data_files, load_schema_files
-from yasl.pydantic_types import YASLBaseModel
-from yasl.sql.types import AstropyQuantityType, PydanticType
+from darig.schema.cache import YaslRegistry
+from darig.schema.core import load_data_files, load_schema_files
+from darig.schema.pydantic_types import YASLBaseModel
+from darig.schema.sql.types import AstropyQuantityType, PydanticType
 
 # --- Helper functions ---
 
@@ -411,7 +411,7 @@ class YaqlEngine:
         """
         from ruamel.yaml import YAML
 
-        from yasl.pydantic_types import YASLBaseModel
+        from darig.schema.pydantic_types import YASLBaseModel
 
         path = Path(export_path)
         path.mkdir(parents=True, exist_ok=True)

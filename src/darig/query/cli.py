@@ -7,7 +7,7 @@ import cmd
 import logging
 import sys
 
-from common.utils import darig_version
+from darig.common.utils import darig_version
 
 from .engine import YaqlEngine
 
