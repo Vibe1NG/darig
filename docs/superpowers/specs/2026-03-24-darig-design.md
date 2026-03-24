@@ -26,6 +26,8 @@ The new package structure will be consolidated under `src/darig/`:
 - `src/yatl/`
 - `tests/yarl/`
 - `tests/yatl/`
+- `features/yarl/`
+- `features/yatl/`
 
 ## CLI Specification
 
@@ -45,7 +47,7 @@ The `darig` command will be the single entry point:
 - **Interactive mode**: If `--interactive` is provided (or no `--sql` is given), enter the `yaql` shell.
 
 ### Global Flags
-- `--version`: Show "Darig v0.1.0".
+- `--version`: Show "Darig v0.5.0" (or current version).
 - `--quiet`/`--verbose`: Control output detail levels.
 - `--output [text|json|yaml]`: Set output format (where applicable).
 
@@ -61,10 +63,15 @@ The `darig` command will be the single entry point:
 - Update `README.md` with new "Darig" branding and vision.
 - Update `AGENTS.md` with new command names and package structure.
 - Update `pyproject.toml` project name and scripts.
+- Update `mkdocs.yml` and all files in `docs/` to reflect the rename and tool consolidation.
+
+### Infrastructure & CI/CD
+- Update GitHub Workflows (`.github/workflows/*.yml`) to reference `darig` instead of `yasl` or `yaql`.
+- Update support scripts like `scripts/bash/verify_prod_deps.sh` to use the new `darig` command.
 
 ### Test Updates
-- Rename `tests/yasl` -> `tests/schema`.
-- Rename `tests/yaql` -> `tests/query`.
+- Rename `tests/yasl` -> `tests/darig/schema`.
+- Rename `tests/yaql` -> `tests/darig/query`.
 - Update BDD feature files in `features/` to use `darig` command syntax.
 
 ## Success Criteria
