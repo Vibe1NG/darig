@@ -7,7 +7,7 @@ import cmd
 import logging
 import sys
 
-from common.utils import advanced_yaml_version
+from common.utils import darig_version
 
 from .engine import YaqlEngine
 
@@ -148,7 +148,7 @@ def main():
         sys.exit(1)
 
     if args.version:
-        print(f"YAQL version {advanced_yaml_version()}")
+        print(f"YAQL version {darig_version()}")
         sys.exit(0)
 
     # Validate schema/data args

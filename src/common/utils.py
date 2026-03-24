@@ -1,8 +1,8 @@
 from importlib.metadata import PackageNotFoundError, version
 
 
-def advanced_yaml_version() -> str:
+def darig_version() -> str:
     try:
-        return version("advanced-yaml")
+        return version("darig")
     except PackageNotFoundError:
         return "Unknown (package not installed)"

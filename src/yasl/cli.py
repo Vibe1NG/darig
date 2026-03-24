@@ -5,7 +5,7 @@ YASL CLI main entry point.
 import argparse
 import sys
 
-from common import advanced_yaml_version
+from common import darig_version
 from yasl import check_paths, check_schema
 
 
@@ -68,7 +68,7 @@ def main():
         sys.exit(1)
 
     if args.version:
-        print(f"YASL version {advanced_yaml_version()}")
+        print(f"YASL version {darig_version()}")
         sys.exit(0)
 
     if args.command == "check":

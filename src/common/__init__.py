@@ -1,6 +1,6 @@
 # from .cli import main
-from common.utils import advanced_yaml_version
+from common.utils import darig_version
 
 __all__ = [
-    "advanced_yaml_version",
+    "darig_version",
 ]
