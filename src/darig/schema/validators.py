@@ -746,9 +746,9 @@ def type_validator_factory(model: TypeDef) -> Callable:
         )
 
     @model_validator(mode="after")
-    def multi_validator(cls, values):
+    def multi_validator(self):
         for validator in validators:
-            values = validator(cls, values)
-        return values
+            self = validator(self.__class__, self)
+        return self
 
     return multi_validator  # type: ignore
