@@ -1,5 +1,5 @@
-# YATL CLI
+# Darig CLI
 
 ::: mkdocs-argparse
-    :module: yatl.cli
+    :module: darig.cli
     :function: get_parser

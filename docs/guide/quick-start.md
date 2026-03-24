@@ -1,6 +1,6 @@
 # Quick Start
 
-This guide will help you get started with **YASL** (YAML Advanced Schema Language) by defining a simple schema, creating a data file, and validating it using the CLI.
+This guide will help you get started with **Darig** by defining a simple schema, creating a data file, and validating it using the CLI.
 
 ## 1. Define a Schema
 
@@ -33,7 +33,7 @@ definitions:
 You can verify that your schema file is syntactically correct using the `schema` command:
 
 ```bash
-yasl schema person.yasl
+darig schema person.yasl
 ```
 
 ## 2. Create Data
@@ -52,10 +52,10 @@ age: 25
 
 ## 3. Validate
 
-Use the `yasl check` command to validate your data against the schema.
+Use the `darig check` command to validate your data against the schema.
 
 ```bash
-yasl check person.yasl data.yaml
+darig check person.yasl data.yaml
 ```
 
 **Expected Output:**
@@ -78,12 +78,12 @@ age: 400  # This violates the 'lt: 125' rule
 Run the validation command again:
 
 ```bash
-yasl check person.yasl data.yaml
+darig check person.yasl data.yaml
 ```
 
 **Expected Output:**
 
-YASL will report the validation error:
+Darig will report the validation error:
 
 ```text
 ❌ Validation failed with 1 error(s):
@@ -92,5 +92,5 @@ YASL will report the validation error:
 
 ## Next Steps
 
-*   Explore the **[YASL CLI Reference](../reference/cli/yasl.md)** for more command options.
-*   Check out the **[YASL API Reference](../reference/api/yasl.md)** to use YASL in your Python code.
+*   Explore the **[Darig CLI Reference](../reference/cli/darig.md)** for more command options.
+*   Check out the **[Schema API Reference](../reference/api/schema.md)** to use Darig in your Python code.

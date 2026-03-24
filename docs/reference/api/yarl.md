@@ -1,3 +1,0 @@
-# YARL API Reference
-
-::: yarl

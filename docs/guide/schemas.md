@@ -1,10 +1,10 @@
 # Using Schemas
 
-This guide provides a comprehensive overview of how to define schemas using **YASL** (YAML Advanced Schema Language).
+This guide provides a comprehensive overview of how to define schemas using **Darig**.
 
 ## Schema Structure
 
-A YASL schema file is a standard YAML file that follows a specific structure. The root of the document must contain a `definitions` key.
+A Darig schema file (typically `.yasl`) is a standard YAML file that follows a specific structure. The root of the document must contain a `definitions` key.
 
 ```yaml
 definitions:

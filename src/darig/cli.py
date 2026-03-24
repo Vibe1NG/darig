@@ -261,7 +261,7 @@ def main():
                 shell = YaqlShell(engine)
                 shell._print_results(results)
                 sys.exit(0)
-            except Exception as e:
+            except Exception:
                 # Error is already logged by engine.execute_sql
                 sys.exit(1)
         else:

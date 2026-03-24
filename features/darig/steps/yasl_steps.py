@@ -21,7 +21,7 @@ def run_cli(args):
     return result
 
 
-@given('a YASL schema "{schema_file}" is provided')
+@given('a Darig schema "{schema_file}" is provided')
 def step_impl_schema(context: Context, schema_file: str):
     context.schema_argument = schema_file
     if not os.path.exists(schema_file):
@@ -42,7 +42,7 @@ def step_impl_model_name(context: Context, model_name: str):
     context.model_name = model_name
 
 
-@when("I run the YASL CLI with provided arguments")
+@when("I run the Darig CLI with provided arguments")
 def step_impl_run_cli(context: Context):
     # This is where your Go application's validation logic would be called
     # For now, we'll simulate success

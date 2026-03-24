@@ -1,19 +1,19 @@
 # AI Agent Instructions
 
-This guide provides a standardized set of instructions you can include in your project's `AGENTS.md` (or similar system prompt file) to help AI assistants understand and work with **YASL** (YAML Advanced Schema Language).
+This guide provides a standardized set of instructions you can include in your project's `AGENTS.md` (or similar system prompt file) to help AI assistants understand and work with **Darig**.
 
 ## Recommended Prompt
 
 Copy and paste the following block into your agent instructions file.
 
 ````markdown
-# YASL (YAML Advanced Schema Language) Guidelines
+# Darig Guidelines
 
-This project uses YASL for data validation and schema definition. When working with YAML files in this repository, adhere to the following rules and structures.
+This project uses Darig for data validation and schema definition. When working with YAML files in this repository, adhere to the following rules and structures.
 
 ## 1. Schema Structure
 
-All YASL schemas must be valid YAML files (`.yasl` extension recommended) with a root `definitions` key.
+All Darig schemas must be valid YAML files (`.yasl` extension recommended) with a root `definitions` key.
 
 ### Basic Skeleton
 ```yaml
@@ -146,12 +146,12 @@ Use the CLI to verify your schemas and data.
 
 1.  **Check Schema Syntax**:
     ```bash
-    yasl schema <path/to/schema.yasl>
+    darig schema <path/to/schema.yasl>
     ```
 
 2.  **Validate Data against Schema**:
     ```bash
-    yasl check <path/to/schema.yasl> <path/to/data.yaml> [more paths...]
+    darig check <path/to/schema.yasl> <path/to/data.yaml> [more paths...]
     ```
 
 ## 5. Comprehensive Example

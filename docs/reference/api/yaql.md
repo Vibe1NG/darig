@@ -1,3 +1,0 @@
-# YAQL API Reference
-
-::: yaql

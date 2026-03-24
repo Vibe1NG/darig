@@ -50,8 +50,6 @@ dev = [
 
 [project.scripts]
 darig = "darig.cli:main"
-yasl = "darig.cli:main"
-yaql = "darig.cli:main"
 
 [dependency-groups]
 dev = [
@@ -77,7 +75,7 @@ testpaths = [
 ]
 
 [tool.behave]
-paths = ["features/darig/schema", "features/darig/query"]
+paths = ["features/darig"]
 format = ["pretty"]
 
 [tool.uv]

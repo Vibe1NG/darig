@@ -1,5 +1,5 @@
 # Project information
-site_name: "Advanced YAML"
+site_name: "Darig"
 site_url: "https://example.com/"
 site_author: "JD Black"
 
@@ -20,8 +20,8 @@ theme:
     - search.suggest
     - search.highlight
   
-  logo: assets/advanced-yaml-logo.svg
-  favicon: assets/advanced-yaml-logo.svg
+  logo: assets/darig-logo.svg
+  favicon: assets/darig-logo.svg
 
 # --- Plugins ---
 plugins:
@@ -64,15 +64,10 @@ nav:
       - "Data References": "guide/references.md"
       - "AI Agents": "guide/ai-agents.md"
   - "CLI Reference":
-      - "YASL CLI": "reference/cli/yasl.md"
-      - "YAQL CLI": "reference/cli/yaql.md"
-      - "YARL CLI": "reference/cli/yarl.md"
-      - "YATL CLI": "reference/cli/yatl.md"
+      - "Darig CLI": "reference/cli/darig.md"
   - "API Reference":
-      - "YASL API": "reference/api/yasl.md"
-      - "YAQL API": "reference/api/yaql.md"
-      - "YARL API": "reference/api/yarl.md"
-      - "YATL API": "reference/api/yatl.md"
+      - "Schema API": "reference/api/schema.md"
+      - "Query API": "reference/api/query.md"
   - "About":
       - "License": "license.md"
       - "Contributing": "contributing.md"

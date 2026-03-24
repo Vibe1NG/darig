@@ -36,7 +36,7 @@ fi
 # Verification 2: Run the help commands for each CLI tool
 # This catches missing runtime dependencies (ImportErrors)
 echo "Verifying CLI entry points..."
-TOOLS=("yasl" "yaql" "yarl" "yatl")
+TOOLS=("darig")
 FAILED=0
 
 for tool in "${TOOLS[@]}"; do

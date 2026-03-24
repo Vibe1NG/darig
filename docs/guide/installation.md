@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-**Advanced YAML** requires Python **3.12** or greater. Please ensure you have a compatible version of Python installed on your system before proceeding.
+**Darig** requires Python **3.12** or greater. Please ensure you have a compatible version of Python installed on your system before proceeding.
 
 You can check your current python version with:
 
@@ -12,14 +12,14 @@ python --version
 
 ## Installing from PyPI
 
-Advanced YAML is published on the Python Package Index (PyPI) and can be installed using standard Python tooling.
+Darig is published on the Python Package Index (PyPI) and can be installed using standard Python tooling.
 
 ### Using pip
 
 To install using the standard `pip` package manager:
 
 ```bash
-pip install advanced-yaml
+pip install darig
 ```
 
 ### Using Poetry
@@ -27,7 +27,7 @@ pip install advanced-yaml
 If you are managing your project with [Poetry](https://python-poetry.org/):
 
 ```bash
-poetry add advanced-yaml
+poetry add darig
 ```
 
 ### Using uv
@@ -35,14 +35,13 @@ poetry add advanced-yaml
 If you are using [uv](https://github.com/astral-sh/uv) for fast package management:
 
 ```bash
-uv add advanced-yaml
+uv add darig
 ```
 
 ## Verification
 
-Once installed, you can verify that the CLI tools are available in your path:
+Once installed, you can verify that the CLI tool is available in your path:
 
 ```bash
-yasl --version
-yaql --version
+darig --version
 ```
