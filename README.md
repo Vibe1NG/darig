@@ -5,8 +5,8 @@
 Darig is a suite of tools that streamline data management of structured data in YAML.
 
 These tools include:
- - [YASL](./src/yasl/README.md) - YAML Advanced Schema Language
- - [YAQL](./src/yaql/README.md) - YAML Advanced Query Language
+ - [YASL](./src/darig/schema/README.md) - YAML Advanced Schema Language
+ - [YAQL](./src/darig/query/README.md) - YAML Advanced Query Language
 
 ## Vision & Inspiration
 

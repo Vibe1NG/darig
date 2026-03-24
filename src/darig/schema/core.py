@@ -1,4 +1,3 @@
-# validate_config_with_lines.py
 import json
 import logging
 import os

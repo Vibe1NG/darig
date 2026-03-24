@@ -30,7 +30,7 @@ The project uses **uv** for dependency management and task execution. All comman
 *   **Formatter:** We use `ruff`. Always run `uv run ruff format` before submitting changes.
 *   **Imports:**
     *   Sort imports using `ruff` (automated).
-    *   Use absolute imports for internal modules (e.g., `from yasl.core import Schema` instead of `from .core import Schema`).
+    *   Use absolute imports for internal modules (e.g., `from darig.schema import Schema` instead of `from .core import Schema`).
     *   Group standard library, third-party, and local imports separately.
 
 ### Type Safety
@@ -53,8 +53,8 @@ The project uses **uv** for dependency management and task execution. All comman
 ## 3. Project Structure
 
 The project is modularized by functionality:
-*   `src/yasl/`: **YASL** (YAML Advanced Scripting Language) - Schema definition & verification.
-*   `src/yaql/`: **YAQL** (YAML Advanced Query Language) - Querying capabilities.
+*   `src/darig/schema/`: **YASL** (YAML Advanced Scripting Language) - Schema definition & verification.
+*   `src/darig/query/`: **YAQL** (YAML Advanced Query Language) - Querying capabilities.
 *   `tests/`: Unit tests mirroring the `src` structure.
 *   `features/`: Gherkin feature files for BDD.
 
