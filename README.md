@@ -42,7 +42,7 @@ Darig is written in python and managed with the `UV` tool.
     ```
 - Clone the darig repo
     ```bash
-    git clone git@github.com:jondavid-black/darig.git
+    git clone git@github.com:Vibe1NG/darig.git
     cd darig
     ```
 
