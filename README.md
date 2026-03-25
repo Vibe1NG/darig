@@ -1,4 +1,4 @@
-![darig](./DarigLogo.png)
+![darig](./DarigLogo_graphic.png)
 
 # Darig
 
