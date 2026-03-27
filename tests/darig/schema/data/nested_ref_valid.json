@@ -1,0 +1,27 @@
+{
+  "containers": [
+    {
+      "name": "container1",
+      "items": [
+        {
+          "id": "item1",
+          "name": "Item One"
+        },
+        {
+          "id": "item2",
+          "name": "Item Two"
+        }
+      ]
+    },
+    {
+      "name": "container2",
+      "items": [
+        {
+          "id": "item3",
+          "name": "Item Three"
+        }
+      ]
+    }
+  ],
+  "target_item": "item2"
+}

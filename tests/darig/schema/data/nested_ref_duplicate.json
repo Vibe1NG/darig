@@ -1,0 +1,22 @@
+{
+  "containers": [
+    {
+      "name": "container1",
+      "items": [
+        {
+          "id": "item1",
+          "name": "Item One"
+        }
+      ]
+    },
+    {
+      "name": "container2",
+      "items": [
+        {
+          "id": "item1",
+          "name": "Item One Again"
+        }
+      ]
+    }
+  ]
+}
