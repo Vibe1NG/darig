@@ -1,0 +1,8 @@
+tests/darig/schema/data/dir_test/person.json
+tests/darig/schema/data/forward_ref.json
+tests/darig/schema/data/nested_ref_duplicate.json
+tests/darig/schema/data/nested_ref_valid.json
+tests/darig/schema/data/presence_optional_missing.json
+tests/darig/schema/data/presence_required_invalid.json
+tests/darig/schema/data/presence_required_valid.json
+tests/darig/schema/data/presence_required_warn.json
