@@ -68,8 +68,16 @@ class DarigQueryEngine:
     def load_schema(self, schema_path: str) -> bool:
         """Loads Darig Schema schema files and dynamically creates SQLModel classes."""
         try:
+            from sqlalchemy.orm import clear_mappers
+
             # Clear previous state
+            clear_mappers()
             SQLModel.metadata.clear()
+
+            # Clear internal sqlmodel registry to prevent SAWarning
+            if hasattr(SQLModel, "_sa_registry"):
+                SQLModel._sa_registry.dispose()
+
             self.sql_models.clear()
             self.registry.clear_caches()
             self.registry._init_registry()
@@ -272,15 +280,19 @@ class DarigQueryEngine:
                         continue
 
                 # 3. Fallback to standard handling
-                annotations[field_name] = field_info.annotation
                 sa_column = _get_sql_type(
                     field_info.annotation
                 )  # This will still return JSON for lists/dicts
 
-                # Override _get_sql_type behavior for DarigBaseModel if it slipped through?
-                # _get_sql_type uses PydanticType for DarigBaseModel.
-                # Since we handled DarigBaseModel above, this call shouldn't return PydanticType for them,
-                # UNLESS it's a list[DarigBaseModel] or something not caught by check_type logic.
+                if sa_column is not None and isinstance(sa_column.type, type(JSON())):
+                    # For JSON columns containing complex Pydantic models (like lists of models),
+                    # SQLModel/Pydantic validation can emit warnings during serialization when fetching data
+                    # back from the DB because the data is now standard dicts rather than Pydantic models.
+                    # Setting the annotation to Any avoids these warnings while preserving functionality
+                    # since the DB schema handles the JSON storage.
+                    annotations[field_name] = Any
+                else:
+                    annotations[field_name] = field_info.annotation
 
                 if sa_column is not None:
                     fields[field_name] = Field(sa_column=sa_column, default=None)

@@ -165,14 +165,20 @@ def darig_eval(
     if Path(yaml_data).is_dir():
         for p in Path(yaml_data).rglob("*.yaml"):
             yaml_files.append(p)
+        for p in Path(yaml_data).rglob("*.json"):
+            yaml_files.append(p)
+        for p in Path(yaml_data).rglob("*.jsonl"):
+            yaml_files.append(p)
         if not yaml_files:
-            log.error(f"❌ No .yaml files found in directory '{yaml_data}'")
+            log.error(
+                f"❌ No .yaml, .json, or .jsonl files found in directory '{yaml_data}'"
+            )
             registry.clear_caches()
             return None
-        log.debug(f"Found {len(yaml_files)} .yaml files in directory '{yaml_data}'")
+        log.debug(f"Found {len(yaml_files)} data files in directory '{yaml_data}'")
     else:
         if not Path(yaml_data).exists():
-            log.error(f"❌ YAML data file '{yaml_data}' not found")
+            log.error(f"❌ Data file '{yaml_data}' not found")
             registry.clear_caches()
             return None
         yaml_files.append(Path(yaml_data))
@@ -262,9 +268,11 @@ def check_paths(
     for p_str in paths:
         p = Path(p_str)
         if p.is_dir():
-            # Recursively find .yaml, .yml, .darig_schema
+            # Recursively find .yaml, .yml, .json, .jsonl, .yasl
             files_to_process.update(p.rglob("*.yaml"))
             files_to_process.update(p.rglob("*.yml"))
+            files_to_process.update(p.rglob("*.json"))
+            files_to_process.update(p.rglob("*.jsonl"))
             files_to_process.update(p.rglob("*.yasl"))
             log.debug(
                 f"Scanned directory '{p}' found {len(files_to_process)} files so far."
@@ -305,9 +313,25 @@ def check_paths(
 
         log.debug(f"Processing '{path_str}'")
         try:
-            with open(file_path) as f:
-                # load_all returns a generator
-                docs = list(yaml_loader.load_all(f))
+            docs = []
+            if path_str.endswith(".json"):
+                with open(file_path) as f:
+                    data_obj = json.load(f)
+                    if isinstance(data_obj, list):
+                        docs.extend(data_obj)
+                    else:
+                        docs.append(data_obj)
+            elif path_str.endswith(".jsonl"):
+                with open(file_path) as f:
+                    for _, line in enumerate(f, start=1):
+                        line = line.strip()
+                        if not line:
+                            continue
+                        docs.append(json.loads(line))
+            else:
+                with open(file_path) as f:
+                    # load_all returns a generator
+                    docs = list(yaml_loader.load_all(f))
         except Exception as e:
             log.error(f"❌ Failed to read file '{path_str}': {e}")
             return False
@@ -1281,9 +1305,24 @@ def load_data_files(path: str, model_name: str | None = None) -> Any:
     docs = []
     data = None
     try:
-        yaml_loader = YAML(typ="rt")
-        with open(path) as f:
-            docs.extend(yaml_loader.load_all(f))
+        if path.endswith(".json"):
+            with open(path) as f:
+                data_obj = json.load(f)
+                if isinstance(data_obj, list):
+                    docs.extend(data_obj)
+                else:
+                    docs.append(data_obj)
+        elif path.endswith(".jsonl"):
+            with open(path) as f:
+                for _, line in enumerate(f, start=1):
+                    line = line.strip()
+                    if not line:
+                        continue
+                    docs.append(json.loads(line))
+        else:
+            yaml_loader = YAML(typ="rt")
+            with open(path) as f:
+                docs.extend(yaml_loader.load_all(f))
 
     except FileNotFoundError:
         log.error(f"❌ Error - File not found at '{path}'")
