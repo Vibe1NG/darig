@@ -1,4 +1,6 @@
+from collections.abc import Generator
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -10,7 +12,7 @@ YAML_FILES = list(DATA_DIR.rglob("*.yaml"))
 
 
 @pytest.fixture(autouse=True)
-def load_all_schemas():
+def load_all_schemas() -> Generator[None, None, None]:
     """Clear registry and load all schemas before each test to prevent state leakage."""
     registry = DarigSchemaRegistry()
     registry.clear_caches()
@@ -21,7 +23,7 @@ def load_all_schemas():
 
 
 @pytest.mark.parametrize("yaml_path", YAML_FILES, ids=lambda p: p.name)
-def test_yaml_json_equivalence(yaml_path):
+def test_yaml_json_equivalence(yaml_path: Path) -> None:
     json_path = yaml_path.with_suffix(".json")
     assert json_path.exists(), f"Missing JSON counterpart for {yaml_path.name}"
 
@@ -45,7 +47,7 @@ def test_yaml_json_equivalence(yaml_path):
 
         # Pydantic models and lists support deep equality checks
         # YAML parsing populates 'yaml_line' (excluded from dump) while JSON does not.
-        def dump_models(result):
+        def dump_models(result: list[Any]) -> list[dict[str, Any]]:
             return [m.model_dump() for m in result]
 
         assert dump_models(yaml_result) == dump_models(json_result), (
